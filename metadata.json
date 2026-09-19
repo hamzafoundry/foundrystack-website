@@ -1,0 +1,6 @@
+{
+  "name": "Foundry Stack",
+  "description": "Software, Systems, and Cloud Solutions built around real business operations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

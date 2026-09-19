@@ -1,0 +1,23 @@
+{
+  "entities": {
+    "project_inquiries": {
+      "title": "Project Inquiries",
+      "description": "Form inquiries submitted by visitors requesting project estimates.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "name": { "type": "string" },
+        "company": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "projectType": { "type": "string" },
+        "description": { "type": "string" },
+        "budget": { "type": "string" },
+        "status": { "type": "string" },
+        "notifications": { "type": "object" }
+      },
+      "required": ["id", "createdAt", "name", "email", "description"]
+    }
+  }
+}
