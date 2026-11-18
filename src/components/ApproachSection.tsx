@@ -1,125 +1,100 @@
-import React from 'react';
-import { ProcessStep } from '../types';
-import { Compass, FileText, Code, Rocket, CheckCircle2 } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { BarChart3, Check } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useCalmMotion, useHydrated } from '../lib/useHydrated';
+import { SectionHeader } from './SectionHeader';
 
+/**
+ * How we work: one piece of work travels down the rail beside the four steps.
+ * The travelling is native `position: sticky` (no JavaScript per scroll frame).
+ * JavaScript only notices which step is level with the card and updates its status.
+ *
+ * `active === null` is the finished picture: all steps lit, status "Live".
+ * That is what the pre-built HTML and reduced-motion visitors see.
+ */
 export const ApproachSection: React.FC = () => {
   const { t } = useLanguage();
+  const a = t.approach;
+  const hydrated = useHydrated();
+  const calm = useCalmMotion();
+  const stepRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const [active, setActive] = useState<number | null>(null);
 
-  const steps: ProcessStep[] = [
-    {
-      number: '01',
-      title: t.approach.steps.step1.title,
-      subtitle: t.approach.steps.step1.subtitle,
-      description: t.approach.steps.step1.description,
-      deliverables: t.approach.steps.step1.deliverables,
-    },
-    {
-      number: '02',
-      title: t.approach.steps.step2.title,
-      subtitle: t.approach.steps.step2.subtitle,
-      description: t.approach.steps.step2.description,
-      deliverables: t.approach.steps.step2.deliverables,
-    },
-    {
-      number: '03',
-      title: t.approach.steps.step3.title,
-      subtitle: t.approach.steps.step3.subtitle,
-      description: t.approach.steps.step3.description,
-      deliverables: t.approach.steps.step3.deliverables,
-    },
-    {
-      number: '04',
-      title: t.approach.steps.step4.title,
-      subtitle: t.approach.steps.step4.subtitle,
-      description: t.approach.steps.step4.description,
-      deliverables: t.approach.steps.step4.deliverables,
-    },
-  ];
-
-  const getStepIcon = (num: string) => {
-    switch (num) {
-      case '01': return <Compass className="w-5 h-5 text-cyan-400" />;
-      case '02': return <FileText className="w-5 h-5 text-blue-400" />;
-      case '03': return <Code className="w-5 h-5 text-cyan-400" />;
-      case '04': return <Rocket className="w-5 h-5 text-blue-400" />;
-      default: return <Compass className="w-5 h-5 text-blue-400" />;
+  useEffect(() => {
+    if (!hydrated || calm) {
+      setActive(null);
+      return;
     }
-  };
+    setActive(0);
+    // A thin band at the card's sticky height: whichever step crosses it is the current one.
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const i = stepRefs.current.indexOf(entry.target as HTMLLIElement);
+          if (i >= 0) setActive(i);
+        }
+      },
+      { rootMargin: '-42% 0px -52% 0px' },
+    );
+    stepRefs.current.forEach((el) => el && io.observe(el));
+    return () => io.disconnect();
+  }, [hydrated, calm]);
+
+  const reached = active ?? a.steps.length - 1;
+  const live = reached === a.steps.length - 1;
 
   return (
-    <section id="process" className="py-24 bg-[#030712] relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-950/80 border border-blue-800 text-blue-300 text-xs font-mono font-semibold uppercase tracking-widest">
-            <span>{t.approach.badge}</span>
+    <section id="process" className="py-24 md:py-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeader title={a.title} description={a.intro} />
+
+        <div className="ap-layout">
+          {/* The rail: a progress line and the travelling work card */}
+          <div className="ap-rail" aria-hidden="true">
+            <span className="ap-line" />
+            <span className="ap-fill" style={{ transform: `scaleY(${(reached + 1) / a.steps.length})` }} />
+            <div className="ap-sticky">
+              <span className="ap-dot" data-live={live ? '1' : '0'} />
+              <div className="ap-card">
+                <span className="flex items-center gap-2 text-white/90 text-sm">
+                  <BarChart3 className="w-4 h-4 text-[#7db2ff] flex-none" />
+                  {t.hero.work.report}
+                </span>
+                <span className="ap-status" data-live={live ? '1' : '0'}>
+                  {live ? <Check className="w-3.5 h-3.5" strokeWidth={3} /> : <span className="ap-status-dot" />}
+                  {a.status[reached]}
+                </span>
+              </div>
+            </div>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight font-heading">
-            {t.approach.title}
-          </h2>
-
-          <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-            {t.approach.description}
-          </p>
-        </div>
-
-        {/* Timeline Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-          
-          {/* Subtle Connecting Process Line (Desktop) */}
-          <div className="hidden lg:block absolute top-28 left-12 right-12 h-0.5 bg-gradient-to-r from-blue-600/20 via-cyan-400/50 to-blue-600/20 z-0 pointer-events-none" />
-
-          {steps.map((step) => (
-            <div
-              key={step.number}
-              className="relative z-10 glass-panel glass-panel-hover rounded-2xl p-6 border border-blue-900/40 flex flex-col justify-between group"
-            >
-              <div>
-                {/* Step Badge & Number */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="p-3 rounded-xl bg-slate-900 border border-blue-800/60 shadow-md group-hover:border-cyan-400/60 transition-colors">
-                    {getStepIcon(step.number)}
-                  </div>
-                  <span className="font-mono text-3xl font-extrabold text-slate-700 group-hover:text-blue-400 transition-colors">
-                    {step.number}
-                  </span>
-                </div>
-
-                {/* Step Title & Subtitle */}
-                <h3 className="text-2xl font-bold text-white font-heading mb-1">
-                  {step.title}
-                </h3>
-
-                <p className="text-xs font-semibold font-mono text-cyan-400 mb-4">
-                  {step.subtitle}
-                </p>
-
-                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
-                  {step.description}
-                </p>
-              </div>
-
-              {/* Step Deliverables */}
-              <div className="pt-4 border-t border-slate-800/80 space-y-2">
-                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">
-                  {t.approach.milestoneDeliverables}
+          {/* A real sequence, so it is numbered */}
+          <ol className="ap-steps">
+            {a.steps.map((step, i) => (
+              <li
+                key={step.title}
+                ref={(el) => {
+                  stepRefs.current[i] = el;
+                }}
+                className="ap-step"
+                data-reached={i <= reached ? '1' : '0'}
+              >
+                <span className="type-display block text-[3rem] leading-none text-brand" aria-hidden="true">
+                  {i + 1}
                 </span>
-                {step.deliverables.map((del, dIdx) => (
-                  <div key={dIdx} className="flex items-start gap-2 text-[11px] text-slate-300">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0 mt-0.5" />
-                    <span>{del}</span>
+                <div className="min-w-0">
+                  <h3 className="type-heading text-2xl text-ink">{step.title}</h3>
+                  <p className="mt-2 text-lg text-ink-2 leading-relaxed max-w-[52ch]">{step.happens}</p>
+                  <div className="mt-4 border-s-2 border-brand ps-4">
+                    <p className="text-sm font-semibold text-brand-deep">{a.youGet}</p>
+                    <p className="mt-1 text-ink">{step.get}</p>
                   </div>
-                ))}
-              </div>
-
-            </div>
-          ))}
-
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
-
       </div>
     </section>
   );

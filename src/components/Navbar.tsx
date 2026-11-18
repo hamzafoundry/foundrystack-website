@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
 import { FoundryLogo } from './FoundryLogo';
-import { Menu, X, ArrowUpRight, Code, Terminal } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface NavbarProps {
   onOpenContact: () => void;
 }
+
+// 'ai-automation' sits inside 'services', so it is checked first and wins while it is on screen
+const SECTION_IDS = ['home', 'ai-automation', 'services', 'examples', 'process', 'about', 'contact'];
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
   const { t } = useLanguage();
@@ -16,162 +19,139 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-
-      // Track active section
-      const sections = ['home', 'services', 'solutions', 'capabilities', 'process', 'about', 'contact'];
-      const scrollPosition = window.scrollY + 100;
-
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section);
-            break;
-          }
+      setIsScrolled(window.scrollY > 12);
+      const probe = window.scrollY + 120;
+      for (const id of SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (el && probe >= el.offsetTop && probe < el.offsetTop + el.offsetHeight) {
+          setActiveSection(id);
+          break;
         }
       }
     };
-
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMobileMenuOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [mobileMenuOpen]);
+
   const navLinks = [
-    { name: t.nav.home, href: '#home', id: 'home' },
-    { name: t.nav.services, href: '#services', id: 'services' },
-    { name: t.nav.capabilities, href: '#capabilities', id: 'capabilities' },
-    { name: t.nav.solutions, href: '#solutions', id: 'solutions' },
-    { name: t.nav.about, href: '#about', id: 'about' },
-    { name: t.nav.contact, href: '#contact', id: 'contact' },
+    { name: t.nav.aiAutomation, id: 'ai-automation', flagship: true },
+    { name: t.nav.services, id: 'services' },
+    { name: t.nav.examples, id: 'examples' },
+    { name: t.nav.howWeWork, id: 'process' },
+    { name: t.nav.about, id: 'about' },
+    // The main button already leads to the contact form, so Contact only appears in the phone menu
+    { name: t.nav.contact, id: 'contact', mobileOnly: true },
   ];
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const go = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     setMobileMenuOpen(false);
-    const targetId = href.replace('#', '');
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  const solid = isScrolled || mobileMenuOpen;
+  // At the very top the bar floats over the dark hero, so it uses light text
+  const onDark = !solid;
 
   return (
     <header
-      id="main-navigation-header"
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-[#020617]/85 backdrop-blur-md border-b border-slate-800/80 py-3 shadow-lg shadow-black/50'
-          : 'bg-transparent py-5'
+      className={`fixed top-0 inset-x-0 z-50 transition-colors duration-200 ${
+        solid ? 'bg-ground/95 backdrop-blur-md border-b border-line' : 'bg-transparent border-b border-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Brand Logo */}
-          <a
-            href="#home"
-            onClick={(e) => handleNavClick(e, '#home')}
-            className="flex items-center gap-2 group focus:outline-none"
-            aria-label="Foundry Stack Home"
-          >
-            <FoundryLogo size="sm" />
-          </a>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-[72px] flex items-center justify-between gap-6">
+        <a href="#home" onClick={(e) => go(e, 'home')} aria-label="Foundry Stack" className="flex-shrink-0">
+          <FoundryLogo size="sm" tone={onDark ? 'dark' : 'light'} />
+        </a>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 rounded-full bg-slate-900/60 p-1 border border-blue-900/30 backdrop-blur-md">
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.id;
-              return (
-                <a
-                  key={link.id}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 ${
-                    isActive
-                      ? 'text-white bg-blue-600/80 shadow-[0_0_12px_rgba(0,102,255,0.4)]'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+        <nav className="hidden xl:flex items-center gap-6" aria-label="Main">
+          {navLinks.filter((l) => !l.mobileOnly).map((link) => {
+            const isActive = activeSection === link.id;
+            return (
+              <a
+                key={link.id}
+                href={`#${link.id}`}
+                onClick={(e) => go(e, link.id)}
+                aria-current={isActive ? 'true' : undefined}
+                className={`relative py-2 text-[15px] whitespace-nowrap transition-colors inline-flex items-center gap-2 ${
+                  link.flagship ? 'font-semibold' : 'font-medium'
+                } ${
+                  onDark
+                    ? isActive || link.flagship ? 'text-white' : 'text-white/75 hover:text-white'
+                    : isActive || link.flagship ? 'text-ink' : 'text-ink-2 hover:text-ink'
+                }`}
+              >
+                {link.flagship && <span className="w-1.5 h-1.5 rounded-full bg-brand shadow-[0_0_8px_#3D8BFF]" aria-hidden="true" />}
+                {link.name}
+                <span
+                  className={`absolute inset-x-0 -bottom-0.5 h-[2px] bg-brand origin-left transition-transform duration-200 ${
+                    isActive ? 'scale-x-100' : 'scale-x-0'
                   }`}
-                >
-                  {link.name}
-                </a>
-              );
-            })}
-          </nav>
+                />
+              </a>
+            );
+          })}
+        </nav>
 
-          {/* Right Action Button & Language Switcher & Mobile Toggle */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Language Switcher */}
-            <LanguageSwitcher />
-
-            {/* Primary CTA */}
-            <button
-              onClick={onOpenContact}
-              className="hidden sm:inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 border border-blue-400/30 shadow-[0_0_20px_rgba(0,102,255,0.3)] hover:shadow-[0_0_28px_rgba(0,102,255,0.5)] transition-all duration-200 cursor-pointer active:scale-95"
-            >
-              <span>{t.nav.discussProject}</span>
-              <ArrowUpRight className="w-4 h-4 text-cyan-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </button>
-
-            {/* Mobile Hamburger Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg bg-slate-900/80 border border-blue-800/40 text-slate-300 hover:text-white focus:outline-none cursor-pointer"
-              aria-label="Toggle Navigation Menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6 text-blue-400" /> : <Menu className="w-6 h-6 text-blue-400" />}
-            </button>
-          </div>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <LanguageSwitcher onDark={onDark} />
+          <button
+            type="button"
+            onClick={onOpenContact}
+            className="press hidden sm:inline-flex items-center px-5 py-2.5 rounded-[3px] bg-brand text-white text-sm font-semibold whitespace-nowrap hover:bg-brand-deep cursor-pointer"
+          >
+            {t.nav.discussProject}
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((o) => !o)}
+            className={`xl:hidden p-2 -me-2 cursor-pointer ${onDark ? 'text-white' : 'text-ink'}`}
+            aria-label={t.nav.mobileTitle}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav"
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[60px] bg-[#030712]/95 border-b border-blue-900/50 backdrop-blur-xl py-6 px-6 shadow-2xl transition-all duration-300 animate-in fade-in slide-in-from-top-2">
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
-              <span className="text-xs uppercase tracking-widest text-slate-400 font-mono flex items-center gap-2">
-                <Terminal className="w-3.5 h-3.5 text-blue-400" />
-                {t.nav.mobileTitle}
-              </span>
-              <span className="text-[10px] bg-blue-950 text-blue-300 px-2 py-0.5 rounded border border-blue-800 font-mono">
-                {t.nav.version}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 gap-1">
-              {navLinks.map((link) => (
+        <nav id="mobile-nav" className="menu-drop xl:hidden border-t border-line bg-ground px-4 sm:px-6 pb-6" aria-label="Main">
+          <ul>
+            {navLinks.map((link) => (
+              <li key={link.id} className="border-b border-line">
                 <a
-                  key={link.id}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className="px-4 py-3 rounded-lg text-sm font-semibold text-slate-200 hover:text-white hover:bg-blue-950/60 transition-colors flex items-center justify-between"
+                  href={`#${link.id}`}
+                  onClick={(e) => go(e, link.id)}
+                  className={`flex items-center gap-2.5 py-4 text-lg ${link.flagship ? 'font-semibold' : 'font-medium'} ${
+                    activeSection === link.id ? 'text-brand-deep' : 'text-ink'
+                  }`}
                 >
-                  <span>{link.name}</span>
-                  <Code className="w-4 h-4 text-slate-500" />
+                  {link.flagship && <span className="w-2 h-2 rounded-full bg-brand" aria-hidden="true" />}
+                  {link.name}
                 </a>
-              ))}
-            </div>
-
-            <div className="pt-4 border-t border-slate-800 space-y-3">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenContact();
-                }}
-                className="w-full py-3 rounded-lg text-xs font-bold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-900/40 flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>{t.nav.discussProject}</span>
-                <ArrowUpRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              onOpenContact();
+            }}
+            className="press mt-6 w-full py-4 rounded-[3px] bg-brand text-white font-semibold hover:bg-brand-deep cursor-pointer"
+          >
+            {t.nav.discussProject}
+          </button>
+        </nav>
       )}
     </header>
   );

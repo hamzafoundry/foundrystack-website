@@ -1,0 +1,87 @@
+name: Check and deploy
+
+# Pull requests into main: type-check and build only.
+# Merges (pushes) to main: the same checks, then deploy to Cloud Run.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch: # manual "Run workflow" button (deploys only when run on main)
+
+# Never run two production deploys at once; a newer PR check replaces an older one.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    name: Type-check and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install exact dependency versions
+        run: npm ci --no-audit --no-fund
+
+      - name: Type-check
+        run: npm run lint
+
+      - name: Build (client, pre-rendered HTML, server)
+        run: npm run build
+
+  deploy:
+    name: Deploy to Cloud Run
+    needs: check
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: read
+      id-token: write # lets GitHub prove its identity to Google: no stored keys
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud (Workload Identity Federation)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      # Builds the Dockerfile with Cloud Build and rolls out a new revision.
+      # Environment variables, secrets and the runtime service account already set
+      # on the service are kept: this only replaces the code.
+      - name: Deploy
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ vars.CLOUD_RUN_SERVICE }}
+          region: ${{ vars.CLOUD_RUN_REGION }}
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          source: ./
+          flags: --port=3000
+
+      - name: Smoke test the live site
+        env:
+          PUBLIC_URL: ${{ vars.PUBLIC_URL || 'https://foundrystack.net' }}
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            health=$(curl -fsS --max-time 15 "$PUBLIC_URL/api/health" || true)
+            page=$(curl -fsS --max-time 15 "$PUBLIC_URL/" || true)
+            # The new build reports brand "FoundryStack" and pre-renders the hero headline.
+            if echo "$health" | grep -q '"brand":"FoundryStack"' && echo "$page" | grep -q '<h1'; then
+              echo "Live site is healthy: $health"
+              exit 0
+            fi
+            echo "Attempt $attempt: not serving the new build yet, retrying in 15s"
+            sleep 15
+          done
+          echo "::error::$PUBLIC_URL is not serving the new build. Cloud Run URL: ${{ steps.deploy.outputs.url }}"
+          exit 1

@@ -1,24 +1,41 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { LanguageCode, LANGUAGES, LanguageInfo } from './languages';
 import { en, Translations } from './translations/en';
-import { es } from './translations/es';
-import { ar } from './translations/ar';
-import { zh } from './translations/zh';
-import { fr } from './translations/fr';
-import { pt } from './translations/pt';
-import { ja } from './translations/ja';
-import { de } from './translations/de';
 
-const translationMap: Record<LanguageCode, Translations> = {
-  en,
-  es,
-  ar,
-  zh,
-  fr,
-  pt,
-  ja,
-  de,
+/*
+  Only English ships in the main bundle (it is also what the pre-built HTML contains).
+  Every other language is a separate file, downloaded only when a visitor needs it.
+*/
+const loaders: Record<LanguageCode, () => Promise<Translations>> = {
+  en: async () => en,
+  es: () => import('./translations/es').then((m) => m.es),
+  ar: () => import('./translations/ar').then((m) => m.ar),
+  zh: () => import('./translations/zh').then((m) => m.zh),
+  fr: () => import('./translations/fr').then((m) => m.fr),
+  pt: () => import('./translations/pt').then((m) => m.pt),
+  ja: () => import('./translations/ja').then((m) => m.ja),
+  de: () => import('./translations/de').then((m) => m.de),
 };
+
+const cache: Partial<Record<LanguageCode, Translations>> = { en };
+
+export function loadTranslations(code: LanguageCode): Promise<Translations> {
+  const cached = cache[code];
+  if (cached) return Promise.resolve(cached);
+  return loaders[code]().then((t) => (cache[code] = t));
+}
+
+export const LOCAL_STORAGE_KEY = 'foundry_lang';
+
+export function readSavedLanguage(): LanguageCode {
+  try {
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY) as LanguageCode | null;
+    if (saved && saved in loaders) return saved;
+  } catch {
+    // storage blocked: fall back to English
+  }
+  return 'en';
+}
 
 interface LanguageContextType {
   language: LanguageCode;
@@ -30,61 +47,50 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-const LOCAL_STORAGE_KEY = 'foundry_lang';
+interface LanguageProviderProps {
+  children: ReactNode;
+  initialLanguage?: LanguageCode;
+  initialTranslations?: Translations;
+}
 
-export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<LanguageCode>(() => {
-    try {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY) as LanguageCode;
-      if (saved && translationMap[saved]) {
-        return saved;
-      }
-    } catch (e) {
-      console.warn('LocalStorage unavailable for language setting:', e);
-    }
-    return 'en';
+export const LanguageProvider: React.FC<LanguageProviderProps> = ({
+  children,
+  initialLanguage = 'en',
+  initialTranslations = en,
+}) => {
+  const [state, setState] = useState<{ language: LanguageCode; t: Translations }>({
+    language: initialLanguage,
+    t: initialTranslations,
   });
 
-  const languageInfo = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0];
-  const t = translationMap[language] || en;
+  const languageInfo = LANGUAGES.find((l) => l.code === state.language) || LANGUAGES[0];
   const isRtl = languageInfo.dir === 'rtl';
 
-  const setLanguage = (code: LanguageCode) => {
-    if (translationMap[code]) {
-      setLanguageState(code);
-      try {
-        localStorage.setItem(LOCAL_STORAGE_KEY, code);
-      } catch (e) {
-        console.warn('Failed to save language to localStorage:', e);
-      }
-    }
-  };
+  const setLanguage = useCallback((code: LanguageCode) => {
+    loadTranslations(code)
+      .then((t) => {
+        setState({ language: code, t });
+        try {
+          localStorage.setItem(LOCAL_STORAGE_KEY, code);
+        } catch {
+          // storage blocked: the choice simply isn't remembered
+        }
+      })
+      .catch((e) => console.warn(`Could not load the ${code} translation:`, e));
+  }, []);
 
   useEffect(() => {
-    // Update HTML attributes for layout & RTL support
-    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
-    document.documentElement.lang = language;
-
-    // Update document title and meta description
-    if (t.meta?.title) {
-      document.title = t.meta.title;
-    }
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc && t.meta?.description) {
-      metaDesc.setAttribute('content', t.meta.description);
-    }
-  }, [language, isRtl, t]);
+    const root = document.documentElement;
+    root.dir = isRtl ? 'rtl' : 'ltr';
+    root.lang = state.language;
+    // Set by the inline script in index.html while a non-English language loads
+    root.classList.remove('lang-pending');
+    if (state.t.meta?.title) document.title = state.t.meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', state.t.meta.description);
+  }, [state, isRtl]);
 
   return (
-    <LanguageContext.Provider
-      value={{
-        language,
-        languageInfo,
-        setLanguage,
-        t,
-        isRtl,
-      }}
-    >
+    <LanguageContext.Provider value={{ language: state.language, languageInfo, setLanguage, t: state.t, isRtl }}>
       {children}
     </LanguageContext.Provider>
   );

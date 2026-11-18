@@ -1,178 +1,175 @@
-import React from 'react';
-import { ServiceItem } from '../types';
-import { Layout, Database, Cloud, Bot, ArrowRight, Sparkles, Check, Code2 } from 'lucide-react';
+import React, { useId, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { ArrowRight, Check, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useCalmMotion } from '../lib/useHydrated';
+import { SectionHeader } from './SectionHeader';
+import { AgentGlyph } from './AgentGlyph';
+import { FEATURED_SERVICE, SERVICE_LAYERS, ServiceId, ServiceLayer, isPlaceholder } from './serviceLayers';
 
 interface ServicesSectionProps {
-  onSelectService: (serviceId: string) => void;
+  onSelectService: (serviceId: ServiceId) => void;
 }
+
+/** Text that is still an unconfirmed placeholder gets a dashed amber outline so nobody ships it by accident. */
+const MaybePlaceholder: React.FC<{ text: string }> = ({ text }) => {
+  if (!isPlaceholder(text)) return <>{text}</>;
+  const [before, rest] = text.split('⟦');
+  const [mark, after = ''] = rest.split('⟧');
+  return (
+    <>
+      {before}
+      <mark className="svc-placeholder">⟦{mark}⟧</mark>
+      {after}
+    </>
+  );
+};
+
+interface ServiceCardProps {
+  layer: ServiceLayer;
+  featured: boolean;
+  onSelect: () => void;
+}
+
+/** One anatomy for all four services; the flagship is the same card, larger and highlighted. */
+const ServiceCard: React.FC<ServiceCardProps> = ({ layer, featured, onSelect }) => {
+  const { t } = useLanguage();
+  const calm = useCalmMotion();
+  const s = t.services;
+  const item = s.items[layer.key];
+  const [open, setOpen] = useState(false);
+  const panelId = useId();
+
+  const head = (
+    <>
+      {featured && (
+        <p className="svc-badge">
+          <span className="w-1.5 h-1.5 rounded-full bg-brand" aria-hidden="true" />
+          {s.featuredBadge}
+        </p>
+      )}
+      <div className="flex items-center gap-4">
+        <span className="svc-glyph" aria-hidden="true">
+          <AgentGlyph shape={layer.shape} active={featured} spin={!calm} />
+        </span>
+        <h3 className={`type-heading text-ink min-w-0 ${featured ? 'text-[clamp(1.7rem,3vw,2.4rem)]' : 'text-2xl'}`}>{item.title}</h3>
+      </div>
+      <p className={`mt-6 text-ink-2 leading-relaxed ${featured ? 'text-lg' : ''}`}>{item.problem}</p>
+      <p className={`mt-3 text-ink leading-relaxed font-medium ${featured ? 'text-xl' : 'text-lg'}`}>{item.whatWeDo}</p>
+      <div className="mt-5 border-s-2 border-brand ps-4">
+        <p className="text-sm font-semibold text-brand-deep">{s.youGet}</p>
+        <p className="mt-1 text-ink leading-relaxed">{item.result}</p>
+      </div>
+    </>
+  );
+
+  const body = (
+    <>
+      <ul className="grid grid-cols-1 gap-y-3">
+        {item.features.map((feature) => (
+          <li key={feature} className="flex gap-3 text-[15px] text-ink-2 leading-snug">
+            <span className="mt-[7px] w-1.5 h-1.5 bg-brand flex-shrink-0" aria-hidden="true" />
+            <span>{feature}</span>
+          </li>
+        ))}
+      </ul>
+
+      {/* The hero's story in miniature: one piece of work, before and after */}
+      <div className="svc-work" aria-hidden="true">
+        <span className="svc-work-before">{item.work.before}</span>
+        <ArrowRight className="svc-work-arrow" />
+        <span className="svc-work-after">
+          <Check className="w-3.5 h-3.5" strokeWidth={3} />
+          {item.work.after}
+        </span>
+      </div>
+    </>
+  );
+
+  return (
+    <article id={layer.id === FEATURED_SERVICE ? 'ai-automation' : undefined} className={`svc-card ${featured ? 'svc-card-featured lg:col-span-3' : ''}`}>
+      <div className={`flex-1 ${featured ? 'grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14' : 'flex flex-col gap-7'}`}>
+        <div>{head}</div>
+        <div className="flex flex-col gap-7">{body}</div>
+      </div>
+
+      <div className="svc-footer">
+        <button type="button" onClick={onSelect} className={featured ? 'svc-cta-primary' : 'svc-cta-secondary'}>
+          {featured ? t.hero.ctaDiscuss : s.ctaOther}
+        </button>
+        <button type="button" className="svc-toggle" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen((o) => !o)}>
+          {open ? s.hideHow : s.showHow}
+          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} aria-hidden="true" />
+        </button>
+      </div>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            id={panelId}
+            initial={calm ? false : { height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={calm ? undefined : { height: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="svc-how">
+              <ul className={`grid grid-cols-1 gap-3 ${featured ? 'lg:grid-cols-2 lg:gap-x-10' : ''}`}>
+                {item.how.map((line) => (
+                  <li key={line} className="flex gap-3 text-[15px] text-ink-2 leading-relaxed">
+                    <span className="mt-[9px] w-3 h-px bg-ink-3 flex-shrink-0" aria-hidden="true" />
+                    <span>
+                      <MaybePlaceholder text={line} />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-6 text-sm font-semibold text-ink">{s.toolsLabel}</p>
+              <ul className="mt-2.5 flex flex-wrap gap-2">
+                {layer.tools.map((tool) => (
+                  <li key={tool} className={isPlaceholder(tool) ? 'svc-tool svc-tool-placeholder' : 'svc-tool'}>
+                    {tool}
+                  </li>
+                ))}
+              </ul>
+              {/* Apps we can connect: a capability, not a list of past projects */}
+              {'connects' in item && (
+                <>
+                  <p className="mt-5 text-sm font-semibold text-ink">{s.connectLabel}</p>
+                  <ul className="mt-2.5 flex flex-wrap gap-2">
+                    {item.connects.map((app) => (
+                      <li key={app} className="svc-tool">
+                        {app}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </article>
+  );
+};
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectService }) => {
   const { t } = useLanguage();
 
-  const services: ServiceItem[] = [
-    {
-      id: 'web-apps',
-      title: t.services.items.webApps.title,
-      tagline: t.services.items.webApps.tagline,
-      description: t.services.items.webApps.description,
-      keyFeatures: t.services.items.webApps.features,
-      iconName: 'Layout',
-    },
-    {
-      id: 'custom-systems',
-      title: t.services.items.customSystems.title,
-      tagline: t.services.items.customSystems.tagline,
-      description: t.services.items.customSystems.description,
-      keyFeatures: t.services.items.customSystems.features,
-      iconName: 'Database',
-    },
-    {
-      id: 'cloud-integrations',
-      title: t.services.items.cloudIntegrations.title,
-      tagline: t.services.items.cloudIntegrations.tagline,
-      description: t.services.items.cloudIntegrations.description,
-      keyFeatures: t.services.items.cloudIntegrations.features,
-      iconName: 'Cloud',
-    },
-    {
-      id: 'ai-automation',
-      title: t.services.items.aiAutomation.title,
-      badge: t.services.statusBuilding,
-      badgeType: 'building',
-      tagline: t.services.items.aiAutomation.tagline,
-      description: t.services.items.aiAutomation.description,
-      keyFeatures: t.services.items.aiAutomation.features,
-      iconName: 'Bot',
-    },
-  ];
-
-  const getIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'Layout':
-        return <Layout className="w-6 h-6 text-blue-400" />;
-      case 'Database':
-        return <Database className="w-6 h-6 text-cyan-400" />;
-      case 'Cloud':
-        return <Cloud className="w-6 h-6 text-blue-400" />;
-      case 'Bot':
-        return <Bot className="w-6 h-6 text-cyan-400" />;
-      default:
-        return <Code2 className="w-6 h-6 text-blue-400" />;
-    }
-  };
-
   return (
-    <section id="services" className="py-24 bg-[#020617] relative overflow-hidden">
-      {/* Background Accent Grids */}
-      <div className="absolute inset-0 bg-line-grid opacity-30 pointer-events-none" />
-      <div className="absolute top-1/2 -left-40 w-96 h-96 bg-blue-900/10 rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-800/60 text-blue-300 text-xs font-mono font-semibold uppercase tracking-widest">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>{t.services.badge}</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight font-heading">
-            {t.services.title}
-          </h2>
-
-          <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-            {t.services.description}
-          </p>
+    <section id="services" className="py-24 md:py-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeader title={t.services.title} description={t.services.intro} />
+        <div className="svc-grid grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {SERVICE_LAYERS.map((layer) => (
+            <ServiceCard
+              key={layer.id}
+              layer={layer}
+              featured={layer.id === FEATURED_SERVICE}
+              onSelect={() => onSelectService(layer.id)}
+            />
+          ))}
         </div>
-
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {services.map((service) => {
-            const isBuilding = service.badgeType === 'building';
-
-            return (
-              <div
-                key={service.id}
-                className={`group relative rounded-2xl p-8 glass-panel glass-panel-hover flex flex-col justify-between border transition-all duration-300 ${
-                  isBuilding
-                    ? 'border-cyan-500/30 bg-gradient-to-b from-[#0a152e]/80 to-[#030b1e]/90'
-                    : 'border-blue-900/40 hover:border-blue-500/50'
-                }`}
-              >
-                {/* Top Service Badge Header */}
-                <div>
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="p-3.5 rounded-xl bg-slate-900/90 border border-blue-800/50 shadow-inner group-hover:border-blue-500/60 transition-colors">
-                      {getIcon(service.iconName)}
-                    </div>
-
-                    {service.badge ? (
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/90 border border-cyan-500/50 text-cyan-300 text-xs font-mono font-bold tracking-wider uppercase shadow-[0_0_15px_rgba(6,182,212,0.25)]">
-                        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                        <span>{service.badge}</span>
-                      </div>
-                    ) : (
-                      <span className="text-xs font-mono text-slate-400 uppercase tracking-widest bg-slate-900/60 px-2.5 py-1 rounded border border-slate-800">
-                        {t.services.statusEstablished}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Title & Tagline */}
-                  <h3 className="text-2xl font-bold text-white font-heading group-hover:text-cyan-300 transition-colors mb-2">
-                    {service.title}
-                  </h3>
-
-                  <p className="text-sm font-semibold text-blue-400 mb-4 font-mono">
-                    {service.tagline}
-                  </p>
-
-                  <p className="text-slate-300 text-sm leading-relaxed mb-6">
-                    {service.description}
-                  </p>
-
-                  {/* Key Capabilities List */}
-                  <div className="space-y-2.5 mb-8 pt-2 border-t border-slate-800/80">
-                    <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block mb-2">
-                      {t.services.scopeHeader}
-                    </span>
-                    {service.keyFeatures.map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-300">
-                        <Check className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
-                        <span>{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bottom Card Action */}
-                <div className="pt-4 border-t border-slate-800/60 flex items-center justify-between">
-                  {isBuilding ? (
-                    <span className="text-xs font-mono text-slate-400 italic flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                      {t.services.rdTag}
-                    </span>
-                  ) : (
-                    <span className="text-xs font-mono text-blue-400 group-hover:text-cyan-300 font-semibold transition-colors">
-                      {t.services.customEngineering}
-                    </span>
-                  )}
-
-                  <button
-                    onClick={() => onSelectService(service.id)}
-                    className="p-2 rounded-lg bg-blue-950/80 hover:bg-blue-600 border border-blue-800 hover:border-blue-400 text-slate-200 hover:text-white transition-all duration-200 cursor-pointer group-hover:translate-x-1"
-                    title={`${t.services.inquireButton} ${service.title}`}
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-
-              </div>
-            );
-          })}
-        </div>
-
       </div>
     </section>
   );
