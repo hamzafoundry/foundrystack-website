@@ -46,6 +46,7 @@ export const es: Translations = {
     showHow: "Ver cómo funciona",
     hideHow: "Ocultar detalles",
     toolsLabel: "Herramientas que usamos",
+    connectLabel: "Herramientas que conectamos",
     ctaOther: "Hablemos de esto",
     items: {
       aiAutomation: {
@@ -62,6 +63,7 @@ export const es: Translations = {
         work: { before: "Factura n.º 1042", after: "Archivada y registrada" },
         how: [
           "Analizamos la tarea paso a paso y luego la automatizamos.",
+          "Los flujos funcionan en n8n, con modelos de IA como Claude u OpenAI que se encargan de leer y redactar.",
           "Modelos de IA leen correos, PDF y formularios entrantes, extraen los campos y los escriben en sus sistemas.",
           "Unas reglas deciden qué se ejecuta automáticamente. Lo importante espera su aprobación.",
           "Cada ejecución queda registrada, para que vea qué pasó y por qué.",
@@ -84,7 +86,7 @@ export const es: Translations = {
           "Cada página incluye metadatos estructurados para los buscadores.",
           "Los formularios llegan a su correo o CRM, con protección contra spam.",
           "Añadimos analítica para que vea de dónde vienen las consultas.",
-          "Este sitio web está construido así. ⟦VERIFY after launch: 98/100 on Google’s mobile speed test⟧",
+          "Este sitio web está construido así.",
           "Usted mismo puede editar sus páginas y contenidos, sin necesidad de un desarrollador.",
         ],
       },
@@ -119,6 +121,7 @@ export const es: Translations = {
           "Sus datos con copia de seguridad y protegidos en la nube",
         ],
         work: { before: "Nuevo pedido", after: "Inventario actualizado" },
+        connects: ["Gmail", "Google Sheets", "WhatsApp", "CRM", "Herramientas de contabilidad"],
         how: [
           "Conectamos los sistemas mediante sus API (REST o GraphQL) y webhooks.",
           "Cada sincronización entra en una cola y se reintenta si un servicio está caído, así no se pierde nada.",

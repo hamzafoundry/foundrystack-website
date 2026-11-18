@@ -46,6 +46,7 @@ export const fr: Translations = {
     showHow: "Voir comment ça marche",
     hideHow: "Masquer les détails",
     toolsLabel: "Outils utilisés",
+    connectLabel: "Outils que nous connectons",
     ctaOther: "Parlons-en",
     items: {
       aiAutomation: {
@@ -62,6 +63,7 @@ export const fr: Translations = {
         work: { before: "Facture n° 1042", after: "Classée et enregistrée" },
         how: [
           "Nous décomposons la tâche étape par étape, puis nous l'automatisons.",
+          "Les workflows tournent dans n8n, avec des modèles d'IA comme Claude ou OpenAI pour la lecture et la rédaction.",
           "Des modèles d'IA lisent les e-mails, PDF et formulaires entrants, extraient les champs et les inscrivent dans vos systèmes.",
           "Des règles décident de ce qui s'exécute automatiquement. Tout ce qui est important attend votre validation.",
           "Chaque exécution est journalisée : vous voyez ce qui s'est passé et pourquoi.",
@@ -84,7 +86,7 @@ export const fr: Translations = {
           "Chaque page contient des métadonnées structurées pour les moteurs de recherche.",
           "Les formulaires arrivent dans votre messagerie ou votre CRM, avec une protection anti-spam.",
           "Nous ajoutons des statistiques pour voir d'où viennent les demandes.",
-          "Ce site est construit de la même façon. ⟦VERIFY after launch: 98/100 on Google’s mobile speed test⟧",
+          "Ce site est construit de la même façon.",
           "Vous pouvez modifier vous-même vos pages et vos contenus, sans développeur.",
         ],
       },
@@ -119,6 +121,7 @@ export const fr: Translations = {
           "Vos données sauvegardées et sécurisées dans le cloud",
         ],
         work: { before: "Nouvelle commande", after: "Stock mis à jour" },
+        connects: ["Gmail", "Google Sheets", "WhatsApp", "CRM", "Outils de comptabilité"],
         how: [
           "Nous connectons les systèmes via leurs API (REST ou GraphQL) et des webhooks.",
           "Chaque synchronisation passe par une file d'attente et est relancée si un service est indisponible : rien ne se perd.",

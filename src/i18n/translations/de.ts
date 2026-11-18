@@ -46,6 +46,7 @@ export const de: Translations = {
     showHow: "So funktioniert es",
     hideHow: "Details ausblenden",
     toolsLabel: "Eingesetzte Tools",
+    connectLabel: "Tools, die wir verbinden",
     ctaOther: "Darüber sprechen",
     items: {
       aiAutomation: {
@@ -62,6 +63,7 @@ export const de: Translations = {
         work: { before: "Rechnung Nr. 1042", after: "Abgelegt und erfasst" },
         how: [
           "Wir zerlegen die Aufgabe Schritt für Schritt und automatisieren sie dann.",
+          "Die Workflows laufen in n8n, KI-Modelle wie Claude oder OpenAI übernehmen das Lesen und Schreiben.",
           "KI-Modelle lesen eingehende E-Mails, PDFs und Formulare, extrahieren die Felder und schreiben sie in Ihre Systeme.",
           "Regeln legen fest, was automatisch läuft. Alles Wichtige wartet auf Ihre Freigabe.",
           "Jeder Durchlauf wird protokolliert, damit Sie sehen, was passiert ist und warum.",
@@ -84,7 +86,7 @@ export const de: Translations = {
           "Jede Seite enthält strukturierte Metadaten für Suchmaschinen.",
           "Formulare gehen an Ihre E-Mail oder Ihr CRM, mit Spamschutz.",
           "Wir richten Analysen ein, damit Sie sehen, woher Anfragen kommen.",
-          "Diese Website ist genauso gebaut. ⟦VERIFY after launch: 98/100 on Google’s mobile speed test⟧",
+          "Diese Website ist genauso gebaut.",
           "Sie können Ihre Seiten und Inhalte selbst bearbeiten, ganz ohne Entwickler.",
         ],
       },
@@ -119,6 +121,7 @@ export const de: Translations = {
           "Ihre Daten gesichert und geschützt in der Cloud",
         ],
         work: { before: "Neue Bestellung", after: "Lager aktualisiert" },
+        connects: ["Gmail", "Google Sheets", "WhatsApp", "CRM-Systeme", "Buchhaltungstools"],
         how: [
           "Wir verbinden Systeme über ihre APIs (REST oder GraphQL) und Webhooks.",
           "Jede Synchronisation läuft über eine Warteschlange und wird wiederholt, wenn ein Dienst ausfällt, damit nichts verloren geht.",

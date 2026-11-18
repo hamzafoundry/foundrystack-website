@@ -26,7 +26,7 @@ export const SERVICE_LAYERS: ServiceLayer[] = [
     key: 'aiAutomation',
     shape: 'orbit',
     projectTypeIndex: 0,
-    tools: ['⟦CONFIRM: OpenAI / Anthropic APIs⟧', '⟦CONFIRM: n8n or Make⟧', '⟦CONFIRM: Zapier⟧', '⟦CONFIRM: Google Workspace / Microsoft 365⟧', 'Webhooks', 'Scheduled jobs'],
+    tools: ['n8n', 'Claude', 'OpenAI', 'Webhooks', 'Scheduled jobs'],
   },
   {
     id: 'web-apps',
@@ -47,7 +47,8 @@ export const SERVICE_LAYERS: ServiceLayer[] = [
     key: 'cloudIntegrations',
     shape: 'diamond',
     projectTypeIndex: 3,
-    tools: ['REST APIs', 'GraphQL', 'Webhooks', 'Queues & retries', 'Google Cloud Run', '⟦CONFIRM: Stripe, Shopify, WooCommerce, Xero, QuickBooks, HubSpot⟧'],
+    // The apps this card connects ("Tools we connect") are translated, so they live in the translation files.
+    tools: ['REST APIs', 'GraphQL', 'Webhooks', 'Queues & retries', 'Google Cloud Run'],
   },
 ];
 

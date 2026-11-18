@@ -44,6 +44,7 @@ export const en = {
     showHow: "See how it works",
     hideHow: "Hide details",
     toolsLabel: "Tools we use",
+    connectLabel: "Tools we connect",
     ctaOther: "Talk to us about this",
     items: {
       aiAutomation: {
@@ -60,6 +61,7 @@ export const en = {
         work: { before: "Invoice #1042", after: "Filed and logged" },
         how: [
           "We map the task step by step, then automate it.",
+          "Workflows run in n8n, with AI models such as Claude or OpenAI doing the reading and writing.",
           "AI models read incoming emails, PDFs and forms, extract the fields, and write them to your systems.",
           "Rules decide what runs automatically. Anything important waits for your approval.",
           "Every run is logged, so you can see what happened and why.",
@@ -82,7 +84,7 @@ export const en = {
           "Each page has structured metadata for search engines.",
           "Forms post to your email or CRM, with spam protection.",
           "We add analytics so you can see where enquiries come from.",
-          "This website is built the same way. ⟦VERIFY after launch: 98/100 on Google’s mobile speed test⟧",
+          "This website is built the same way.",
           "You can edit your own pages and content, with no developer needed.",
         ],
       },
@@ -117,6 +119,7 @@ export const en = {
           "Your data backed up and secure in the cloud",
         ],
         work: { before: "New order", after: "Stock updated" },
+        connects: ["Gmail", "Google Sheets", "WhatsApp", "CRMs", "Accounting tools"],
         how: [
           "We connect systems through their APIs (REST or GraphQL) and webhooks.",
           "Every sync is queued and retried if a service is down, so nothing is lost.",

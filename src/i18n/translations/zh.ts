@@ -46,6 +46,7 @@ export const zh: Translations = {
     showHow: "了解工作原理",
     hideHow: "收起详情",
     toolsLabel: "我们使用的工具",
+    connectLabel: "我们连接的工具",
     ctaOther: "和我们聊聊",
     items: {
       aiAutomation: {
@@ -62,6 +63,7 @@ export const zh: Translations = {
         work: { before: "发票 #1042", after: "已归档并登记" },
         how: [
           "我们把任务逐步拆解，然后实现自动化。",
+          "工作流在 n8n 中运行，由 Claude 或 OpenAI 等 AI 模型负责读取和撰写。",
           "AI 模型读取收到的邮件、PDF 和表单，提取字段并写入您的系统。",
           "由规则决定哪些自动执行，重要事项会等待您的批准。",
           "每次运行都有日志，您可以看到发生了什么以及原因。",
@@ -84,7 +86,7 @@ export const zh: Translations = {
           "每个页面都带有供搜索引擎读取的结构化元数据。",
           "表单直接发送到您的邮箱或 CRM，并带有防垃圾信息保护。",
           "我们配置访问统计，让您知道咨询来自哪里。",
-          "本网站正是这样构建的。⟦VERIFY after launch: 98/100 on Google’s mobile speed test⟧",
+          "本网站正是这样构建的。",
           "您可以自行编辑页面和内容，无需开发人员。",
         ],
       },
@@ -119,6 +121,7 @@ export const zh: Translations = {
           "数据在云端备份并安全保存",
         ],
         work: { before: "新订单", after: "库存已更新" },
+        connects: ["Gmail", "Google 表格", "WhatsApp", "CRM 系统", "财务软件"],
         how: [
           "我们通过各系统的 API（REST 或 GraphQL）和 Webhook 进行连接。",
           "每次同步都进入队列，服务中断时会自动重试，数据不会丢失。",

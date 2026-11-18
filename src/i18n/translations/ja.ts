@@ -46,6 +46,7 @@ export const ja: Translations = {
     showHow: "仕組みを見る",
     hideHow: "詳細を閉じる",
     toolsLabel: "使用するツール",
+    connectLabel: "連携するツール",
     ctaOther: "相談する",
     items: {
       aiAutomation: {
@@ -62,6 +63,7 @@ export const ja: Translations = {
         work: { before: "請求書 #1042", after: "保存・記録済み" },
         how: [
           "業務を一つずつ分解し、そのうえで自動化します。",
+          "ワークフローは n8n で動き、読み取りや文章作成は Claude や OpenAI などの AI モデルが担当します。",
           "AI モデルが受信したメール、PDF、フォームを読み取り、項目を抽出してシステムに書き込みます。",
           "自動で実行する範囲はルールで決め、重要なものはあなたの承認を待ちます。",
           "すべての実行がログに残るので、何が起きたか、なぜかを確認できます。",
@@ -84,7 +86,7 @@ export const ja: Translations = {
           "各ページに検索エンジン向けの構造化メタデータを設定します。",
           "フォームはスパム対策付きで、メールや CRM に届きます。",
           "問い合わせの流入元がわかるようアクセス解析を設定します。",
-          "このサイトも同じ方法で構築しています。⟦VERIFY after launch: 98/100 on Google’s mobile speed test⟧",
+          "このサイトも同じ方法で構築しています。",
           "ページや内容はご自身で編集でき、開発者は不要です。",
         ],
       },
@@ -119,6 +121,7 @@ export const ja: Translations = {
           "データをクラウドにバックアップし安全に保管",
         ],
         work: { before: "新規注文", after: "在庫を更新" },
+        connects: ["Gmail", "Google スプレッドシート", "WhatsApp", "CRM", "会計ソフト"],
         how: [
           "各システムの API（REST または GraphQL）と Webhook で連携します。",
           "同期はすべてキューで処理し、サービス停止時は再試行するのでデータを失いません。",

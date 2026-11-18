@@ -132,6 +132,19 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ layer, featured, onSelect }) 
                   </li>
                 ))}
               </ul>
+              {/* Apps we can connect: a capability, not a list of past projects */}
+              {'connects' in item && (
+                <>
+                  <p className="mt-5 text-sm font-semibold text-ink">{s.connectLabel}</p>
+                  <ul className="mt-2.5 flex flex-wrap gap-2">
+                    {item.connects.map((app) => (
+                      <li key={app} className="svc-tool">
+                        {app}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </div>
           </motion.div>
         )}

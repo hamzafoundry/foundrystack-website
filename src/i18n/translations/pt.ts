@@ -46,6 +46,7 @@ export const pt: Translations = {
     showHow: "Veja como funciona",
     hideHow: "Ocultar detalhes",
     toolsLabel: "Ferramentas que usamos",
+    connectLabel: "Ferramentas que conectamos",
     ctaOther: "Vamos conversar sobre isso",
     items: {
       aiAutomation: {
@@ -62,6 +63,7 @@ export const pt: Translations = {
         work: { before: "Fatura nº 1042", after: "Arquivada e registrada" },
         how: [
           "Mapeamos a tarefa passo a passo e depois a automatizamos.",
+          "Os fluxos rodam no n8n, com modelos de IA como Claude ou OpenAI fazendo a leitura e a escrita.",
           "Modelos de IA leem e-mails, PDFs e formulários recebidos, extraem os campos e os gravam nos seus sistemas.",
           "Regras definem o que roda automaticamente. O que for importante espera sua aprovação.",
           "Cada execução fica registrada, para você ver o que aconteceu e por quê.",
@@ -84,7 +86,7 @@ export const pt: Translations = {
           "Cada página tem metadados estruturados para os buscadores.",
           "Os formulários chegam ao seu e-mail ou CRM, com proteção contra spam.",
           "Instalamos análises para você ver de onde vêm os contatos.",
-          "Este site foi construído do mesmo jeito. ⟦VERIFY after launch: 98/100 on Google’s mobile speed test⟧",
+          "Este site foi construído do mesmo jeito.",
           "Você mesmo pode editar suas páginas e conteúdos, sem precisar de um desenvolvedor.",
         ],
       },
@@ -119,6 +121,7 @@ export const pt: Translations = {
           "Seus dados com backup e protegidos na nuvem",
         ],
         work: { before: "Novo pedido", after: "Estoque atualizado" },
+        connects: ["Gmail", "Google Sheets", "WhatsApp", "CRMs", "Ferramentas de contabilidade"],
         how: [
           "Conectamos os sistemas pelas APIs deles (REST ou GraphQL) e webhooks.",
           "Cada sincronização entra em uma fila e é repetida se um serviço cair, então nada se perde.",
