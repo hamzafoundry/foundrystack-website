@@ -1,17 +1,18 @@
 export const en = {
   meta: {
-    title: "Foundry Stack — Software. Systems. Solutions.",
-    description: "Foundry Stack designs and builds web applications, custom business systems, cloud solutions and integrations built around how your business works.",
+    title: "Foundry Stack | AI automation and custom software for growing businesses",
+    description: "Foundry Stack builds AI automations and custom software that take repetitive work off your team: data entry, documents, follow-ups and reporting.",
   },
   nav: {
     home: "Home",
+    aiAutomation: "AI & Automation",
     services: "Services",
     capabilities: "Capabilities",
     solutions: "Solutions",
     process: "Process",
     about: "About",
     contact: "Contact",
-    discussProject: "Discuss a Project",
+    discussProject: "Automate my business",
     mobileTitle: "Foundry Navigation",
     version: "V1.0",
     selectLanguage: "Language",
@@ -19,15 +20,15 @@ export const en = {
   hero: {
     badge: "Engineering Capability",
     tag: "Software. Systems. Solutions.",
-    headlinePrefix: "Software built around ",
-    headlineHighlight: "real business problems.",
-    copy: "Foundry Stack designs and builds web applications, custom business systems, cloud solutions and integrations for businesses that need technology built around how they actually work.",
+    headlinePrefix: "Put your repetitive work on autopilot.",
+    headlineHighlight: "",
+    copy: "We build AI automations that handle data entry, documents, follow-ups and reporting, so your team spends its time on the work that matters.",
     highlights: {
       customArchitecture: "Custom Architecture",
       cloudApiSync: "Cloud & API Sync",
       reliableOperations: "Reliable Operations",
     },
-    ctaDiscuss: "Discuss Your Project",
+    ctaDiscuss: "Automate my business",
     ctaExplore: "Explore Capabilities",
     panel: {
       coreEngine: "Foundry Core Engine",
@@ -39,7 +40,6 @@ export const en = {
       wfLabel: "WORKFLOWS",
       wfVal: "Tailored to Business",
       autoLabel: "AUTOMATION",
-      autoVal: "R&D Capability",
       footerTitle: "Foundry Stack V1",
       footerVal: "Engineering First",
     },
@@ -49,9 +49,8 @@ export const en = {
     title: "Engineering services built for operational impact.",
     description: "We deliver reliable, production-grade technology built around your exact business requirements — from core web applications to cloud infrastructures.",
     scopeHeader: "Key Deliverables & Scope:",
+    featuredBadge: "Flagship service",
     statusEstablished: "Established Service",
-    statusBuilding: "Capability in Development",
-    rdTag: "In R&D — Discuss custom workflow automation",
     customEngineering: "Custom Engineering Available",
     inquireButton: "Inquire about",
     items: {
@@ -90,13 +89,13 @@ export const en = {
       },
       aiAutomation: {
         title: "AI & Workflow Automation",
-        tagline: "Evolving intelligence for operational speed",
-        description: "A developing Foundry Stack capability focused on using AI and automation to reduce repetitive work and create smarter business processes.",
+        tagline: "Intelligent automation for operational speed",
+        description: "AI and automation that cut repetitive work and turn manual steps into smarter business processes.",
         features: [
-          "Automated document & data processing",
-          "AI-assisted workflow triggers & alerts",
-          "Smart system prompts & task summaries",
-          "Custom automation pipeline integration",
+          "Automated data entry and document processing",
+          "Automatic follow-ups for leads, clients and tasks",
+          "Scheduled reports and AI task summaries",
+          "AI-assisted workflow triggers and alerts",
         ],
       },
     },
@@ -267,7 +266,7 @@ export const en = {
       step3: {
         title: "Build",
         subtitle: "Engineer the system.",
-        description: "We write clean, modular, type-safe TypeScript code, integrate database pipelines, implement auth logic, and build responsive interfaces.",
+        description: "We build the automations, integrations and interfaces, with clean, type-safe code and tests at every step.",
         deliverables: [
           "Full-stack TypeScript codebase",
           "Database migrations & API routes",
@@ -292,7 +291,7 @@ export const en = {
     quoteTitle: "Core Engineering Principle",
     quote: "“Software shouldn't just look impressive in a demo. It must run reliably under real business load.”",
     p1: "Foundry Stack is built around a simple, unyielding principle: technology should solve real operational problems rather than exist just because it is technically impressive.",
-    p2: "In a software landscape saturated with brittle visual templates and over-hyped buzzwords, we bring software-engineering discipline, problem-first clarity, and robust implementation to every line of code we write.",
+    p2: "In a market full of AI hype and fragile templates, we bring engineering discipline, problem-first clarity and robust implementation to every line of code we write.",
     p3: "Whether you need a custom web application, an internal management system, or cloud integrations, we focus on building software that integrates seamlessly into your daily operations and produces measurable results.",
     values: {
       reliableImplementation: {
@@ -307,9 +306,9 @@ export const en = {
   },
   cta: {
     badge: "Start a Project Conversation",
-    title: "Have something you need built?",
-    description: "Tell us about the problem, workflow or product you have in mind. We will discuss the technical possibilities and outline a realistic path forward.",
-    button: "Discuss a Project",
+    title: "What would you stop doing by hand?",
+    description: "Tell us which tasks eat up your team's week. We'll show you what can be automated and outline a realistic path forward.",
+    button: "Automate my business",
   },
   contact: {
     badge: "Project Inquiry",
@@ -320,7 +319,7 @@ export const en = {
     noticeTitle: "Notice for Client Inquiries:",
     noticeText: "Contact placeholders are ready to be customized. Submissions via the form are logged immediately to the Foundry Stack backend API endpoint.",
     formTitle: "Project Request Form",
-    formSubtitle: "Fill in your project details below and our team will get back to you with an technical review.",
+    formSubtitle: "Fill in your project details below and our team will get back to you with a technical review.",
     labels: {
       email: "Business Email",
       whatsapp: "WhatsApp Business",
@@ -346,10 +345,10 @@ export const en = {
         "$10,000+",
       ],
       projectTypeOptions: [
+        "Workflow & AI Automation",
         "Websites & Web Apps",
         "Custom Business Systems",
         "Cloud & API Integrations",
-        "Workflow & AI Automation",
         "Technical Architecture Consultation",
         "Other Custom Software",
       ],
@@ -372,7 +371,7 @@ export const en = {
     },
   },
   footer: {
-    brandDesc: "Foundry Stack designs and builds web applications, custom business systems, cloud solutions and integrations for businesses.",
+    brandDesc: "Foundry Stack builds AI automations, custom business systems, web applications and cloud integrations for growing businesses.",
     navHeader: "Navigation",
     legalHeader: "Legal & Policy",
     privacyLink: "Privacy Policy & Terms",

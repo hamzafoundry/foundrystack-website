@@ -2,18 +2,19 @@ import { Translations } from './en';
 
 export const zh: Translations = {
   meta: {
-    title: "Foundry Stack — 软件 · 系统 · 解决方案",
-    description: "Foundry Stack 致力于按照您的实际业务流程定制并开发 Web 应用、企业系统、云端解决方案和系统集成。",
+    title: "Foundry Stack | 为成长型企业打造 AI 自动化与定制软件",
+    description: "Foundry Stack 打造 AI 自动化与定制软件，为您的团队接手重复工作：数据录入、文档处理、跟进与报表。",
   },
   nav: {
     home: "首页",
+    aiAutomation: "AI 与自动化",
     services: "服务",
     capabilities: "工程能力",
     solutions: "解决方案",
     process: "开发流程",
     about: "关于我们",
     contact: "联系我们",
-    discussProject: "项目咨询",
+    discussProject: "让我的业务自动化",
     mobileTitle: "Foundry 导航",
     version: "V1.0",
     selectLanguage: "语言",
@@ -21,15 +22,15 @@ export const zh: Translations = {
   hero: {
     badge: "专业工程研发能力",
     tag: "软件 · 系统 · 解决方案",
-    headlinePrefix: "围绕",
-    headlineHighlight: "真实业务痛点构建软件。",
-    copy: "Foundry Stack 为需要贴合实际运营流程的企业设计并构建 Web 应用程序、定制业务系统、云端解决方案及系统集成。",
+    headlinePrefix: "让重复工作自动运转。",
+    headlineHighlight: "",
+    copy: "我们打造 AI 自动化方案，接手数据录入、文档处理、跟进和报表，让您的团队把时间花在真正重要的工作上。",
     highlights: {
       customArchitecture: "定制架构设计",
       cloudApiSync: "云端与 API 同步",
       reliableOperations: "高可靠运营",
     },
-    ctaDiscuss: "评估您的项目",
+    ctaDiscuss: "让我的业务自动化",
     ctaExplore: "探索工程能力",
     panel: {
       coreEngine: "Foundry 核心引擎",
@@ -41,7 +42,6 @@ export const zh: Translations = {
       wfLabel: "业务流程",
       wfVal: "量身定制流程",
       autoLabel: "自动化",
-      autoVal: "研发与自动化能力",
       footerTitle: "Foundry Stack V1",
       footerVal: "工程优先",
     },
@@ -51,9 +51,8 @@ export const zh: Translations = {
     title: "为提升运营效率而生的工程服务。",
     description: "我们根据您的确切业务需求提供可靠的生产级技术——从核心 Web 应用到云端基础设施。",
     scopeHeader: "核心交付成果与范围：",
+    featuredBadge: "旗舰服务",
     statusEstablished: "成熟服务",
-    statusBuilding: "开发中能力",
-    rdTag: "研发中 — 欢迎咨询定制流程自动化",
     customEngineering: "提供定制工程开发",
     inquireButton: "咨询关于",
     items: {
@@ -92,13 +91,13 @@ export const zh: Translations = {
       },
       aiAutomation: {
         title: "AI 与工作流自动化",
-        tagline: "赋能高效运营的进阶智能",
-        description: "Foundry Stack 正在重点发展的能力，旨在利用 AI 和自动化减少重复工作，构建更智能的业务流程。",
+        tagline: "以智能自动化提升运营效率",
+        description: "利用 AI 与自动化减少重复工作，把人工步骤转变为更智能的业务流程。",
         features: [
-          "自动化文档与数据处理",
-          "AI 辅助的工作流触发与预警",
-          "智能系统提示与任务总结",
-          "定制自动化管道集成",
+          "自动化数据录入与文档处理",
+          "自动跟进潜在客户、客户与任务",
+          "定时报表与 AI 任务摘要",
+          "AI 辅助的工作流触发与提醒",
         ],
       },
     },
@@ -269,7 +268,7 @@ export const zh: Translations = {
       step3: {
         title: "工程研发",
         subtitle: "严谨构建系统代码。",
-        description: "我们编写整洁、模块化且类型安全的 TypeScript 代码，搭建数据库，实现鉴权逻辑并构建响应式界面。",
+        description: "我们构建自动化流程、系统集成和界面，代码整洁、类型安全，每一步都有测试保障。",
         deliverables: [
           "TypeScript 全栈代码库",
           "数据库 Migration 与 API 路由",
@@ -294,7 +293,7 @@ export const zh: Translations = {
     quoteTitle: "核心工程理念",
     quote: "“软件不应只是在演示中看起来惊艳，更必须在真实业务的高负载下稳定运行。”",
     p1: "Foundry Stack 建立在一个简单而坚定的原则之上：技术应当解决真实的运营问题，而不是仅仅为了炫技而存在。",
-    p2: "在充满脆弱视觉模板和过度营销概念的软件行业中，我们在编写的每一行代码里注入工程规范、清晰的业务导向与稳健的落地能力。",
+    p2: "在充斥着 AI 炒作和脆弱模板的市场中，我们为每一行代码带来工程纪律、以问题为先的清晰思路和稳健的实现。",
     p3: "无论您需要定制 Web 应用、内部管理系统还是云端集成，我们都专注于构建能无缝融入您日常运营并产生可衡量价值的软件。",
     values: {
       reliableImplementation: {
@@ -309,9 +308,9 @@ export const zh: Translations = {
   },
   cta: {
     badge: "开启项目探讨",
-    title: "有想要构建的软件系统吗？",
-    description: "向我们讲述您面临的业务挑战、工作流或产品设想。我们将共同探讨技术可行性并规划清晰的落地路径。",
-    button: "探讨项目需求",
+    title: "哪些工作您不想再手动完成？",
+    description: "告诉我们哪些任务占用了团队的时间。我们会告诉您哪些可以自动化，并规划一条切实可行的路径。",
+    button: "让我的业务自动化",
   },
   contact: {
     badge: "项目咨询",
@@ -348,10 +347,10 @@ export const zh: Translations = {
         "10,000 美元以上",
       ],
       projectTypeOptions: [
+        "AI 与工作流自动化",
         "网站与 Web 应用",
         "定制企业系统",
         "云服务与 API 集成",
-        "AI 与工作流自动化",
         "技术架构咨询",
         "其他定制软件",
       ],
@@ -374,7 +373,7 @@ export const zh: Translations = {
     },
   },
   footer: {
-    brandDesc: "Foundry Stack 致力于为企业设计和开发 Web 应用、定制业务系统、云端解决方案及系统集成。",
+    brandDesc: "Foundry Stack 为成长型企业打造 AI 自动化、定制业务系统、Web 应用和云集成。",
     navHeader: "导航",
     legalHeader: "法律与政策",
     privacyLink: "隐私政策与条款",

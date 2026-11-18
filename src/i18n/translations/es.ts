@@ -2,18 +2,19 @@ import { Translations } from './en';
 
 export const es: Translations = {
   meta: {
-    title: "Foundry Stack — Software. Sistemas. Soluciones.",
-    description: "Foundry Stack diseña y construye aplicaciones web, sistemas empresariales a medida, soluciones en la nube e integraciones adaptadas a su flujo operativo.",
+    title: "Foundry Stack | Automatización con IA y software a medida para empresas en crecimiento",
+    description: "Foundry Stack crea automatizaciones con IA y software a medida que liberan a su equipo del trabajo repetitivo: captura de datos, documentos, seguimientos e informes.",
   },
   nav: {
     home: "Inicio",
+    aiAutomation: "IA y automatización",
     services: "Servicios",
     capabilities: "Capacidades",
     solutions: "Soluciones",
     process: "Proceso",
     about: "Nosotros",
     contact: "Contacto",
-    discussProject: "Iniciar Proyecto",
+    discussProject: "Automatizar mi negocio",
     mobileTitle: "Navegación Foundry",
     version: "V1.0",
     selectLanguage: "Idioma",
@@ -21,15 +22,15 @@ export const es: Translations = {
   hero: {
     badge: "Capacidad de Ingeniería",
     tag: "Software. Sistemas. Soluciones.",
-    headlinePrefix: "Software diseñado para ",
-    headlineHighlight: "problemas reales de negocio.",
-    copy: "Foundry Stack diseña y construye aplicaciones web, sistemas empresariales personalizados, soluciones en la nube e integraciones para empresas que necesitan tecnología adaptada a su funcionamiento real.",
+    headlinePrefix: "Ponga su trabajo repetitivo en piloto automático.",
+    headlineHighlight: "",
+    copy: "Creamos automatizaciones con IA que se encargan de la captura de datos, los documentos, los seguimientos y los informes, para que su equipo dedique su tiempo al trabajo que importa.",
     highlights: {
       customArchitecture: "Arquitectura a Medida",
       cloudApiSync: "Sincronización Cloud y API",
       reliableOperations: "Operaciones Fiables",
     },
-    ctaDiscuss: "Evaluar su Proyecto",
+    ctaDiscuss: "Automatizar mi negocio",
     ctaExplore: "Explorar Capacidades",
     panel: {
       coreEngine: "Núcleo Foundry Engine",
@@ -41,7 +42,6 @@ export const es: Translations = {
       wfLabel: "FLUJOS DE TRABAJO",
       wfVal: "Ajustados a su Empresa",
       autoLabel: "AUTOMATIZACIÓN",
-      autoVal: "Capacidad I+D",
       footerTitle: "Foundry Stack V1",
       footerVal: "Ingeniería Primero",
     },
@@ -51,9 +51,8 @@ export const es: Translations = {
     title: "Servicios de ingeniería diseñados para impacto operativo.",
     description: "Entregamos tecnología fiable de grado de producción creada a partir de sus requisitos exactos — desde aplicaciones web centrales hasta infraestructura en la nube.",
     scopeHeader: "Alcance y Entregables Clave:",
+    featuredBadge: "Servicio insignia",
     statusEstablished: "Servicio Establecido",
-    statusBuilding: "Capacidad en Desarrollo",
-    rdTag: "En I+D — Consulte sobre automatización personalizada",
     customEngineering: "Ingeniería Personalizada Disponible",
     inquireButton: "Consultar sobre",
     items: {
@@ -92,13 +91,13 @@ export const es: Translations = {
       },
       aiAutomation: {
         title: "IA y Automatización de Flujos",
-        tagline: "Inteligencia en evolución para agilidad operativa",
-        description: "Una capacidad en desarrollo centrada en el uso de IA y automatización para eliminar tareas repetitivas y crear procesos inteligentes.",
+        tagline: "Automatización inteligente para la agilidad operativa",
+        description: "IA y automatización que eliminan el trabajo repetitivo y convierten los pasos manuales en procesos de negocio más inteligentes.",
         features: [
-          "Procesamiento automatizado de documentos y datos",
-          "Alertas y disparadores asistidos por IA",
-          "Prompts de sistema e resúmenes de tareas",
-          "Integración de tuberías de automatización a medida",
+          "Captura de datos y procesamiento de documentos automatizados",
+          "Seguimientos automáticos de clientes potenciales, clientes y tareas",
+          "Informes programados y resúmenes de tareas con IA",
+          "Disparadores y alertas de flujos de trabajo asistidos por IA",
         ],
       },
     },
@@ -269,7 +268,7 @@ export const es: Translations = {
       step3: {
         title: "Construir",
         subtitle: "Desarrollar el sistema.",
-        description: "Escribimos código TypeScript limpio, modular y seguro, integramos bases de datos, implementamos autenticación y construimos la interfaz.",
+        description: "Construimos las automatizaciones, integraciones e interfaces, con código limpio y tipado, y pruebas en cada paso.",
         deliverables: [
           "Base de código TypeScript Full-Stack",
           "Migraciones de BD y rutas de API",
@@ -294,7 +293,7 @@ export const es: Translations = {
     quoteTitle: "Principio Central de Ingeniería",
     quote: "“El software no solo debe verse impresionante en una demostración. Debe funcionar con total fiabilidad bajo la carga real del negocio.”",
     p1: "Foundry Stack se basa en un principio simple e inflexible: la tecnología debe resolver problemas operativos reales en lugar de existir solo por ser técnicamente vistosa.",
-    p2: "En un panorama de software lleno de plantillas frágiles y términos publicitarios exagerados, aportamos disciplina de ingeniería, claridad funcional e implementación robusta en cada línea de código.",
+    p2: "En un mercado lleno de exageraciones sobre la IA y plantillas frágiles, aportamos disciplina de ingeniería, claridad centrada en el problema e implementación sólida a cada línea de código que escribimos.",
     p3: "Ya sea que necesite una aplicación web a medida, un sistema de gestión interna o integraciones en la nube, nos enfocamos en construir software que se integre perfectamente en sus operaciones diarias y genere resultados medibles.",
     values: {
       reliableImplementation: {
@@ -309,9 +308,9 @@ export const es: Translations = {
   },
   cta: {
     badge: "Inicie una Conversación de Proyecto",
-    title: "¿Tiene algún proyecto que necesite construir?",
-    description: "Cuéntenos sobre el problema, flujo de trabajo o producto que tiene en mente. Analizaremos las posibilidades técnicas y trazaremos una ruta realista.",
-    button: "Iniciar Proyecto",
+    title: "¿Qué dejaría de hacer a mano?",
+    description: "Cuéntenos qué tareas consumen la semana de su equipo. Le mostraremos qué se puede automatizar y trazaremos una ruta realista.",
+    button: "Automatizar mi negocio",
   },
   contact: {
     badge: "Consulta de Proyecto",
@@ -348,10 +347,10 @@ export const es: Translations = {
         "$10,000+",
       ],
       projectTypeOptions: [
+        "IA y Automatización de Flujos",
         "Sitios y Aplicaciones Web",
         "Sistemas Empresariales A Medida",
         "Nube e Integraciones de API",
-        "IA y Automatización de Flujos",
         "Consultoría de Arquitectura Técnica",
         "Otro Software Personalizado",
       ],
@@ -374,7 +373,7 @@ export const es: Translations = {
     },
   },
   footer: {
-    brandDesc: "Foundry Stack diseña y construye aplicaciones web, sistemas empresariales a medida, soluciones en la nube e integraciones para empresas.",
+    brandDesc: "Foundry Stack crea automatizaciones con IA, sistemas empresariales a medida, aplicaciones web e integraciones en la nube para empresas en crecimiento.",
     navHeader: "Navegación",
     legalHeader: "Legal y Políticas",
     privacyLink: "Política de Privacidad y Términos",

@@ -2,18 +2,19 @@ import { Translations } from './en';
 
 export const de: Translations = {
   meta: {
-    title: "Foundry Stack — Software. Systeme. Lösungen.",
-    description: "Foundry Stack entwickelt maßegefertigte Webanwendungen, Unternehmenssysteme, Cloud-Lösungen und API-Integrationen für Ihre operativen Abläufe.",
+    title: "Foundry Stack | KI-Automatisierung und individuelle Software für wachsende Unternehmen",
+    description: "Foundry Stack entwickelt KI-Automatisierungen und individuelle Software, die Ihrem Team Routinearbeit abnehmen: Dateneingabe, Dokumente, Nachfassaktionen und Reporting.",
   },
   nav: {
     home: "Startseite",
+    aiAutomation: "KI & Automatisierung",
     services: "Leistungen",
     capabilities: "Kompetenzen",
     solutions: "Lösungen",
     process: "Prozess",
     about: "Über uns",
     contact: "Kontakt",
-    discussProject: "Projekt anfragen",
+    discussProject: "Mein Unternehmen automatisieren",
     mobileTitle: "Foundry Navigation",
     version: "V1.0",
     selectLanguage: "Sprache",
@@ -21,15 +22,15 @@ export const de: Translations = {
   hero: {
     badge: "Ingenieurmäßige Präzision",
     tag: "Software. Systeme. Lösungen.",
-    headlinePrefix: "Software entwickelt für ",
-    headlineHighlight: "reale geschäftliche Herausforderungen.",
-    copy: "Foundry Stack entwickelt maßegefertigte Webanwendungen, individuelle Unternehmenssysteme, Cloud-Lösungen und Integrationen für Organisationen, die Technologie nach ihren tatsächlichen Abläufen benötigen.",
+    headlinePrefix: "Stellen Sie Ihre Routinearbeit auf Autopilot.",
+    headlineHighlight: "",
+    copy: "Wir entwickeln KI-Automatisierungen, die Dateneingabe, Dokumente, Nachfassaktionen und Reporting übernehmen, damit sich Ihr Team auf die Arbeit konzentrieren kann, die zählt.",
     highlights: {
       customArchitecture: "Maßgeschneiderte Architektur",
       cloudApiSync: "Cloud & API-Synchronisation",
       reliableOperations: "Zuverlässige Abläufe",
     },
-    ctaDiscuss: "Projekt besprechen",
+    ctaDiscuss: "Mein Unternehmen automatisieren",
     ctaExplore: "Kompetenzen entdecken",
     panel: {
       coreEngine: "Foundry Core Engine",
@@ -41,7 +42,6 @@ export const de: Translations = {
       wfLabel: "WORKFLOWS",
       wfVal: "Auf Ihr Geschäft abgestimmt",
       autoLabel: "AUTOMATISIERUNG",
-      autoVal: "F&E-Kapazität",
       footerTitle: "Foundry Stack V1",
       footerVal: "Engineering First",
     },
@@ -51,9 +51,8 @@ export const de: Translations = {
     title: "Engineering-Dienstleistungen für echten operativen Mehrwert.",
     description: "Wir liefern zuverlässige, produktionsreife Technologie, exakt zugeschnitten auf Ihre geschäftlichen Anforderungen — von Kern-Webanwendungen bis hin zu Cloud-Infrastrukturen.",
     scopeHeader: "Wichtige Ergebnisse & Umfang:",
+    featuredBadge: "Flaggschiff-Leistung",
     statusEstablished: "Etablierter Service",
-    statusBuilding: "Fähigkeit in Entwicklung",
-    rdTag: "In F&E — Sprechen Sie uns auf individuelle Automatisierung an",
     customEngineering: "Individuelles Engineering verfügbar",
     inquireButton: "Anfragen zu",
     items: {
@@ -92,13 +91,13 @@ export const de: Translations = {
       },
       aiAutomation: {
         title: "KI & Workflow-Automatisierung",
-        tagline: "Fortschrittliche Intelligenz für operative Schnelligkeit",
-        description: "Eine wachsende Kompetenz von Foundry Stack zur Nutzung von KI und Automatisierung zur Reduzierung manueller Routineaufgaben.",
+        tagline: "Intelligente Automatisierung für operative Schnelligkeit",
+        description: "KI und Automatisierung, die Routinearbeit reduzieren und manuelle Schritte in intelligentere Geschäftsprozesse verwandeln.",
         features: [
-          "Automatisierte Dokumenten- & Datenverarbeitung",
-          "KI-gestützte Workflow-Auslöser & Benachrichtigungen",
-          "Intelligente System-Prompts & Aufgaben-Zusammenfassungen",
-          "Einbindung maßgeschneiderter Automatisierungs-Pipelines",
+          "Automatisierte Dateneingabe und Dokumentenverarbeitung",
+          "Automatische Nachfassaktionen für Leads, Kunden und Aufgaben",
+          "Geplante Berichte und KI-Aufgabenzusammenfassungen",
+          "KI-gestützte Workflow-Auslöser und Benachrichtigungen",
         ],
       },
     },
@@ -269,7 +268,7 @@ export const de: Translations = {
       step3: {
         title: "Entwickeln",
         subtitle: "Umsetzung und Bau des Systems.",
-        description: "Wir schreiben sauberen, modularen und typsicheren TypeScript-Code, binden Datenbanken an und erstellen die Oberflächen.",
+        description: "Wir entwickeln die Automatisierungen, Integrationen und Oberflächen, mit sauberem, typsicherem Code und Tests in jedem Schritt.",
         deliverables: [
           "Full-Stack TypeScript Codebasis",
           "Datenbank-Migrationen & API-Routen",
@@ -294,7 +293,7 @@ export const de: Translations = {
     quoteTitle: "Grundlegendes Engineering-Prinzip",
     quote: "„Software darf nicht nur in einer Präsentation gut aussehen. Sie muss unter der realen Last des Geschäftsbetriebs absolut zuverlässig funktionieren.“",
     p1: "Foundry Stack basiert auf einem einfachen Grundsatz: Technologie soll reale operative Probleme lösen, statt reine technische Selbstdarstellung zu sein.",
-    p2: "In einer Branche voller instabiler Vorlagen und übertriebener Schlagworte bringen wir ingenieurmäßige Disziplin, funktionale Klarheit und solide Umsetzung in jede Zeile Code.",
+    p2: "In einem Markt voller KI-Hype und fragiler Vorlagen bringen wir technische Disziplin, problemorientierte Klarheit und robuste Umsetzung in jede Codezeile, die wir schreiben.",
     p3: "Ob maßgeschneiderte Webanwendung, internes Verwaltungssystem oder Cloud-Integration — wir entwickeln Software, die sich nahtlos in Ihre täglichen Abläufe einfügt.",
     values: {
       reliableImplementation: {
@@ -309,9 +308,9 @@ export const de: Translations = {
   },
   cta: {
     badge: "Projektgespräch Starten",
-    title: "Möchten Sie ein System entwickeln lassen?",
-    description: "Erzählen Sie uns von Ihrer Anforderung, Ihrem Prozess oder Ihrem geplanten Produkt. Wir prüfen die technischen Möglichkeiten und skizzieren einen realistischen Weg.",
-    button: "Projekt Besprechen",
+    title: "Was würden Sie gern nicht mehr von Hand erledigen?",
+    description: "Sagen Sie uns, welche Aufgaben die Woche Ihres Teams auffressen. Wir zeigen Ihnen, was sich automatisieren lässt, und skizzieren einen realistischen Weg dorthin.",
+    button: "Mein Unternehmen automatisieren",
   },
   contact: {
     badge: "Projektanfrage",
@@ -348,10 +347,10 @@ export const de: Translations = {
         "Über 10.000 €",
       ],
       projectTypeOptions: [
+        "KI & Workflow-Automatisierung",
         "Websites & Webanwendungen",
         "Maßgeschneiderte Unternehmenssysteme",
         "Cloud & API-Integrationen",
-        "KI & Workflow-Automatisierung",
         "Technische Architekturberatung",
         "Sonstige individuelle Software",
       ],
@@ -374,7 +373,7 @@ export const de: Translations = {
     },
   },
   footer: {
-    brandDesc: "Foundry Stack entwickelt maßgeschneiderte Webanwendungen, Unternehmenssysteme, Cloud-Lösungen und API-Integrationen.",
+    brandDesc: "Foundry Stack entwickelt KI-Automatisierungen, individuelle Geschäftssysteme, Webanwendungen und Cloud-Integrationen für wachsende Unternehmen.",
     navHeader: "Navigation",
     legalHeader: "Rechtliches & Richtlinien",
     privacyLink: "Datenschutz & Impressum",

@@ -2,18 +2,19 @@ import { Translations } from './en';
 
 export const ja: Translations = {
   meta: {
-    title: "Foundry Stack — ソフトウェア・システム・ソリューション",
-    description: "Foundry Stack は、お客様の実際の業務プロセスに合わせた Web アプリケーション、カスタム業務システム、クラウドソリューション、API 連携を設計・構築します。",
+    title: "Foundry Stack | 成長企業のための AI 自動化とカスタムソフトウェア",
+    description: "Foundry Stack は、データ入力、書類処理、フォローアップ、レポート作成といった定型業務をチームから引き受ける AI 自動化とカスタムソフトウェアを開発します。",
   },
   nav: {
     home: "ホーム",
+    aiAutomation: "AI と自動化",
     services: "サービス",
     capabilities: "技術能力",
     solutions: "ソリューション",
     process: "開発プロセス",
     about: "会社概要",
     contact: "お問い合わせ",
-    discussProject: "プロジェクトのご相談",
+    discussProject: "業務を自動化する",
     mobileTitle: "Foundry ナビゲーション",
     version: "V1.0",
     selectLanguage: "言語",
@@ -21,15 +22,15 @@ export const ja: Translations = {
   hero: {
     badge: "確かなエンジニアリング実績",
     tag: "ソフトウェア・システム・ソリューション",
-    headlinePrefix: "現場の",
-    headlineHighlight: "課題解決に特化したソフトウェア開発。",
-    copy: "Foundry Stack は、実際の業務フローに適したテクノロジーを必要とする企業のために、Web アプリケーション、カスタム基幹システム、クラウドソリューション、連携基盤を設計・構築します。",
+    headlinePrefix: "繰り返し作業を、自動運転に。",
+    headlineHighlight: "",
+    copy: "データ入力、書類処理、フォローアップ、レポート作成を AI 自動化に任せ、チームが本当に大切な仕事に時間を使えるようにします。",
     highlights: {
       customArchitecture: "オーダーメイド建築設計",
       cloudApiSync: "クラウド＆API同期",
       reliableOperations: "高信頼性の運用基盤",
     },
-    ctaDiscuss: "プロジェクトについて相談する",
+    ctaDiscuss: "業務を自動化する",
     ctaExplore: "技術能力を見る",
     panel: {
       coreEngine: "Foundry コアエンジン",
@@ -41,7 +42,6 @@ export const ja: Translations = {
       wfLabel: "ワークフロー",
       wfVal: "業務プロセスに最適化",
       autoLabel: "自動化",
-      autoVal: "R&D・自動化機能",
       footerTitle: "Foundry Stack V1",
       footerVal: "エンジニアリング第一主義",
     },
@@ -51,9 +51,8 @@ export const ja: Translations = {
     title: "業務効率化と成果創出のためのエンジニアリング。",
     description: "Web アプリケーションからクラウドインフラまで、お客様の正確な要件に合わせて、本番環境で確実に機能する技術を提供します。",
     scopeHeader: "主な提供成果物・対応範囲：",
+    featuredBadge: "主力サービス",
     statusEstablished: "提供実績のあるサービス",
-    statusBuilding: "開発・検証中の機能",
-    rdTag: "R&D進行中 — 業務自動化のご相談を承ります",
     customEngineering: "カスタムエンジニアリング対応可能",
     inquireButton: "について問い合わせる",
     items: {
@@ -92,13 +91,13 @@ export const ja: Translations = {
       },
       aiAutomation: {
         title: "AI ＆ 業務自動化",
-        tagline: "業務スピードを高める先進のインテリジェンス",
-        description: "定型業務を削減し、よりスマートな業務プロセスを実現する AI と自動化の技術開発。",
+        tagline: "業務スピードを高めるインテリジェントな自動化",
+        description: "AI と自動化で定型業務を減らし、手作業をよりスマートな業務プロセスへと置き換えます。",
         features: [
-          "書類・データの自動処理パイプライン",
-          "AI アシストによる通知・トリガー制御",
-          "スマートシステムプロンプトと要約機能",
-          "カスタム自動化ワークフローの統合",
+          "データ入力と書類処理の自動化",
+          "見込み客・顧客・タスクへの自動フォローアップ",
+          "定期レポートと AI によるタスク要約",
+          "AI によるワークフローのトリガーとアラート",
         ],
       },
     },
@@ -269,7 +268,7 @@ export const ja: Translations = {
       step3: {
         title: "構築・実装",
         subtitle: "システムの開発・実装。",
-        description: "クリーンで型安全な TypeScript コードの記述、データベース接続、認証ロジック、UI 実装。",
+        description: "自動化、システム連携、画面を、型安全でクリーンなコードと各段階でのテストとともに構築します。",
         deliverables: [
           "フルスタック TypeScript コードベース",
           "DB マイグレーション＆ API ルーティング",
@@ -294,7 +293,7 @@ export const ja: Translations = {
     quoteTitle: "開発における核心の原則",
     quote: "「ソフトウェアはデモで美しく見えれば良いわけではありません。実際の業務の負荷下で、確実に稼働し続ける必要があります。」",
     p1: "Foundry Stack はシンプルで揺るぎない信念に基づいています。技術は単に見栄えが良いから存在するのではなく、実際の業務課題を解決するためにあります。",
-    p2: "複雑で脆弱な既存テンプレートや流行の言葉が溢れる業界において、私たちはコードの 1 行 1 行に確固たる技術的規律と実用的な実装品質を注ぎ込みます。",
+    p2: "AI ブームと壊れやすいテンプレートがあふれる市場で、私たちは書くコードの一行一行に、エンジニアリングの規律、課題を起点にした明快さ、堅実な実装を持ち込みます。",
     p3: "カスタム Web アプリ、社内管理システム、クラウド統合のいずれであっても、日々の業務にスムーズに溶け込み、確実な成果を生むソフトウェアを提供します。",
     values: {
       reliableImplementation: {
@@ -309,9 +308,9 @@ export const ja: Translations = {
   },
   cta: {
     badge: "ご相談を始める",
-    title: "開発したいシステムはございますか？",
-    description: "抱えている課題やご構想中の製品についてお聞かせください。技術的な実現可能性を検討し、現実的なプランをご提案します。",
-    button: "プロジェクトの相談をする",
+    title: "手作業から解放されたい業務は何ですか？",
+    description: "チームの時間を奪っている業務を教えてください。自動化できる範囲をお示しし、現実的な進め方をご提案します。",
+    button: "業務を自動化する",
   },
   contact: {
     badge: "お問い合わせ",
@@ -348,10 +347,10 @@ export const ja: Translations = {
         "10,000 ドル以上",
       ],
       projectTypeOptions: [
+        "AI ＆ 業務自動化",
         "Web サイト＆ Web アプリ",
         "カスタム業務システム",
         "クラウド＆ API 連携",
-        "AI ＆ 業務自動化",
         "技術アーキテクチャ相談",
         "その他カスタム開発",
       ],
@@ -374,7 +373,7 @@ export const ja: Translations = {
     },
   },
   footer: {
-    brandDesc: "Foundry Stack は、企業向け Web アプリ、カスタム業務システム、クラウドソリューション、連携基盤を設計・構築します。",
+    brandDesc: "Foundry Stack は、成長企業向けに AI 自動化、カスタム業務システム、Web アプリケーション、クラウド連携を開発します。",
     navHeader: "ナビゲーション",
     legalHeader: "法的情報＆ポリシー",
     privacyLink: "プライバシーポリシー＆利用規約",

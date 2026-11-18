@@ -1,88 +1,72 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { ChevronDown, Check } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { LANGUAGES, LanguageCode } from '../i18n/languages';
-import { Globe, ChevronDown, Check } from 'lucide-react';
 
-interface LanguageSwitcherProps {
-  compact?: boolean;
-}
-
-export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ compact = false }) => {
-  const { language, setLanguage, languageInfo } = useLanguage();
+export const LanguageSwitcher: React.FC<{ onDark?: boolean }> = ({ onDark = false }) => {
+  const { language, setLanguage, languageInfo, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
+    if (!isOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setIsOpen(false);
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false);
+    document.addEventListener('mousedown', onClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [isOpen]);
 
-  const handleSelect = (code: LanguageCode) => {
+  const select = (code: LanguageCode) => {
     setLanguage(code);
     setIsOpen(false);
   };
 
   return (
-    <div className="relative inline-block text-left z-50" ref={dropdownRef}>
+    <div className="relative" ref={ref}>
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className={`inline-flex items-center gap-2 rounded-lg font-mono text-xs font-semibold transition-all cursor-pointer ${
-          compact
-            ? 'px-2.5 py-1.5 bg-slate-900/90 text-slate-200 border border-slate-800 hover:border-blue-500/60 hover:text-white'
-            : 'px-3 py-1.5 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-blue-500/50 shadow-sm'
+        onClick={() => setIsOpen((o) => !o)}
+        className={`inline-flex items-center gap-1.5 px-2.5 py-2 rounded-[3px] text-sm font-medium transition-colors cursor-pointer ${
+          onDark ? 'text-white/80 hover:text-white hover:bg-white/10' : 'text-ink-2 hover:text-ink hover:bg-surface/70'
         }`}
         aria-expanded={isOpen}
         aria-haspopup="true"
-        title="Switch Language"
+        aria-label={`${t.nav.selectLanguage}: ${languageInfo.name}`}
       >
-        <Globe className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
-        <span className="flex items-center gap-1.5">
-          <span className="text-sm leading-none">{languageInfo.flag}</span>
-          <span>{compact ? languageInfo.code.toUpperCase() : languageInfo.nativeName}</span>
-        </span>
-        <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+        <span className="uppercase tracking-wide">{languageInfo.code}</span>
+        <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 rounded-xl bg-[#090d1f] border border-blue-500/40 shadow-2xl shadow-blue-950/80 py-1.5 text-xs font-mono animate-in fade-in zoom-in-95 z-50">
-          <div className="px-3 py-1.5 text-[10px] font-semibold text-cyan-400 uppercase tracking-wider border-b border-slate-800/80 mb-1 flex items-center gap-1.5">
-            <Globe className="w-3 h-3 text-cyan-400" />
-            <span>Select Language</span>
-          </div>
-          <div className="max-h-64 overflow-y-auto custom-scrollbar">
-            {LANGUAGES.map((lang) => {
-              const isSelected = lang.code === language;
-              return (
+        <ul className="absolute end-0 mt-2 w-52 bg-surface border border-line rounded-[3px] shadow-[0_12px_32px_-12px_rgba(15,27,45,0.35)] py-1 z-50">
+          {LANGUAGES.map((lang) => {
+            const isSelected = lang.code === language;
+            return (
+              <li key={lang.code}>
                 <button
-                  key={lang.code}
                   type="button"
-                  onClick={() => handleSelect(lang.code)}
-                  className={`w-full text-left px-3 py-2 flex items-center justify-between transition-colors cursor-pointer ${
-                    isSelected
-                      ? 'bg-blue-950/80 text-cyan-300 font-bold border-l-2 border-cyan-400'
-                      : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
+                  lang={lang.code}
+                  onClick={() => select(lang.code)}
+                  className={`w-full px-4 py-2.5 flex items-center justify-between text-start text-sm cursor-pointer transition-colors ${
+                    isSelected ? 'text-brand-deep font-semibold bg-ground/60' : 'text-ink hover:bg-ground/60'
                   }`}
                 >
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-base leading-none">{lang.flag}</span>
-                    <div className="flex flex-col">
-                      <span className="font-semibold">{lang.nativeName}</span>
-                      <span className="text-[10px] text-slate-400 font-sans">{lang.name}</span>
-                    </div>
-                  </div>
-                  {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400" />}
+                  <span>
+                    {lang.nativeName}
+                    {lang.nativeName !== lang.name && <span className="ms-2 text-ink-3 font-normal">{lang.name}</span>}
+                  </span>
+                  {isSelected && <Check className="w-4 h-4" aria-hidden="true" />}
                 </button>
-              );
-            })}
-          </div>
-        </div>
+              </li>
+            );
+          })}
+        </ul>
       )}
     </div>
   );

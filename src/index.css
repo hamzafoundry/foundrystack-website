@@ -1,91 +1,118 @@
 @import "tailwindcss";
 
+/*
+  Foundry Stack design tokens
+  ground   – cool aluminium page background
+  surface  – white plates (forms, raised panels)
+  ink      – navy ink for type and dark bands
+  ink-2    – secondary text
+  line     – hairlines between rows
+  brand    – Foundry Stack electric blue (from the logo)
+*/
+@theme {
+  --color-ground: #E9EDF1;
+  --color-surface: #FFFFFF;
+  --color-ink: #0F1B2D;
+  --color-ink-2: #3D4859;
+  --color-ink-3: #66717F;
+  --color-line: #C6CED7;
+  --color-brand: #0066FF;
+  --color-brand-deep: #0047B8;
+  --color-brand-ink: #002B70;
+  --color-steel-top: #FFFFFF;
+  --color-steel-right: #D3DAE2;
+  --color-steel-left: #B4BECA;
+
+  --font-sans: "Archivo", "Segoe UI", system-ui, -apple-system, "Noto Sans Arabic", "Noto Sans JP", "Noto Sans SC", sans-serif;
+}
+
 @layer base {
+  html {
+    background-color: var(--color-ground);
+  }
+
   body {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: #020617;
-    color: #f8fafc;
+    font-family: var(--font-sans);
+    font-variation-settings: "wdth" 100;
+    background-color: var(--color-ground);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
-  h1, h2, h3, h4, .font-heading {
-    font-family: 'Space Grotesk', -apple-system, sans-serif;
+  ::selection {
+    background: var(--color-brand);
+    color: #fff;
   }
-}
 
-/* Custom subtle grid background pattern from Elegant Dark theme */
-.bg-tech-grid {
-  background-image: radial-gradient(#3b82f6 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-
-.bg-line-grid {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(59, 130, 246, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
-}
-
-/* Elegant Dark Glass Panel */
-.glass-panel {
-  background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(30, 41, 59, 0.8);
-}
-
-.glass-panel-hover {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-panel-hover:hover {
-  border-color: rgba(59, 130, 246, 0.4);
-  box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.15);
-  transform: translateY(-2px);
-}
-
-/* Soft ambient blue light pulse */
-@keyframes pulseGlow {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.05);
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 }
 
-.animate-pulse-glow {
-  animation: pulseGlow 8s ease-in-out infinite;
+/* Wide, heavy display face: stamped-plate headlines */
+.type-display {
+  font-variation-settings: "wdth" 125;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.02;
 }
 
-/* Floating light line */
-@keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(1000%); }
+.type-heading {
+  font-variation-settings: "wdth" 112;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
 }
 
-.animate-scanline {
-  animation: scanline 12s linear infinite;
+.type-condensed {
+  font-variation-settings: "wdth" 80;
 }
 
-/* Custom scrollbars */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Long compound words (German "Herausforderungen") must break rather than push the page wider */
+.type-display,
+.type-heading {
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
-::-webkit-scrollbar-track {
-  background: #020617;
+@media (max-width: 639px) {
+  .type-display {
+    font-variation-settings: "wdth" 108;
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
-  border: 2px solid #020617;
+/* Arabic, Chinese and Japanese have no width axis: keep their natural rhythm */
+:lang(ar) .type-display,
+:lang(zh) .type-display,
+:lang(ja) .type-display {
+  letter-spacing: 0;
+  line-height: 1.2;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6;
+/* Automation agent: its orbit ring turns slowly */
+@keyframes agent-orbit {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
+.agent-orbit {
+  animation: agent-orbit 9s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, ShieldCheck } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { X } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 
 interface PrivacyModalProps {
@@ -9,60 +9,69 @@ interface PrivacyModalProps {
 
 export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
   const { t } = useLanguage();
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const previous = document.activeElement as HTMLElement | null;
+    closeRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+      previous?.focus();
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="bg-[#060b19] border border-blue-500/40 rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto animate-in fade-in zoom-in-95">
-        
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800 sticky top-0 bg-[#060b19] z-10">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-cyan-400" />
-            <h3 className="text-xl font-bold text-white font-heading">
-              {t.privacy.title}
-            </h3>
-          </div>
+  const sections = [
+    [t.privacy.s1Title, t.privacy.s1Text],
+    [t.privacy.s2Title, t.privacy.s2Text],
+    [t.privacy.s3Title, t.privacy.s3Text],
+  ];
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 cursor-pointer"
-          >
+  return (
+    <div className="fixed inset-0 z-[60] bg-ink/60 flex items-center justify-center p-4" onClick={onClose}>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="privacy-title"
+        onClick={(e) => e.stopPropagation()}
+        className="bg-surface text-ink rounded-[3px] max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-[0_24px_64px_-16px_rgba(15,27,45,0.5)]"
+      >
+        <div className="sticky top-0 bg-surface flex items-center justify-between gap-4 px-6 sm:px-8 py-5 border-b border-line">
+          <h2 id="privacy-title" className="type-heading text-xl">
+            {t.privacy.title}
+          </h2>
+          <button ref={closeRef} type="button" onClick={onClose} aria-label={t.privacy.close} className="p-1.5 -me-1.5 text-ink-2 hover:text-ink cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="py-6 space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+        <div className="px-6 sm:px-8 py-6 space-y-5 text-ink-2 leading-relaxed">
           <p>
-            <strong>Foundry Stack</strong> {t.privacy.p1}
+            <strong className="text-ink">Foundry Stack</strong> {t.privacy.p1}
           </p>
-
-          <h4 className="text-sm font-bold text-white font-heading pt-2">{t.privacy.s1Title}</h4>
-          <p>{t.privacy.s1Text}</p>
-
-          <h4 className="text-sm font-bold text-white font-heading pt-2">{t.privacy.s2Title}</h4>
-          <p>{t.privacy.s2Text}</p>
-
-          <h4 className="text-sm font-bold text-white font-heading pt-2">{t.privacy.s3Title}</h4>
-          <p>{t.privacy.s3Text}</p>
-
-          <h4 className="text-sm font-bold text-white font-heading pt-2">{t.privacy.s4Title}</h4>
-          <p>
-            {t.privacy.s4Text} <span className="font-mono text-cyan-400">hamza@foundrystack.net</span>.
-          </p>
+          {sections.map(([title, text]) => (
+            <div key={title}>
+              <h3 className="font-semibold text-ink">{title}</h3>
+              <p className="mt-1">{text}</p>
+            </div>
+          ))}
+          <div>
+            <h3 className="font-semibold text-ink">{t.privacy.s4Title}</h3>
+            <p className="mt-1">
+              {t.privacy.s4Text}{' '}
+              <a href="mailto:hamza@foundrystack.net" className="text-brand-deep underline underline-offset-2">
+                hamza@foundrystack.net
+              </a>
+              .
+            </p>
+          </div>
         </div>
-
-        <div className="pt-4 border-t border-slate-800 flex justify-end">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-500 cursor-pointer"
-          >
-            {t.privacy.close}
-          </button>
-        </div>
-
       </div>
     </div>
   );
