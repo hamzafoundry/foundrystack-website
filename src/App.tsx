@@ -3,7 +3,6 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ServicesSection } from './components/ServicesSection';
 import { ExamplesSection } from './components/ExamplesSection';
-import { EngineeringSection } from './components/EngineeringSection';
 import { ApproachSection } from './components/ApproachSection';
 import { AboutSection } from './components/AboutSection';
 import { CtaBanner } from './components/CtaBanner';
@@ -43,7 +42,6 @@ export default function App() {
         <Hero onDiscussProject={() => scrollToContact()} />
         <ServicesSection onSelectService={inquireService} />
         <ExamplesSection />
-        <EngineeringSection />
         <ApproachSection />
         <AboutSection />
         <CtaBanner onDiscussProject={() => scrollToContact()} />

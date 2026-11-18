@@ -514,7 +514,8 @@ export const WorkFlow: React.FC<WorkFlowProps> = ({ agents, jobs, doneLabel, rtl
       <div
         ref={tipRef}
         id="wf-tip"
-        role="tooltip"
+        role={current ? 'tooltip' : undefined}
+        aria-hidden={current ? undefined : true}
         className={`wf-tip ${current ? 'is-open' : ''}`}
       >
         {current && (

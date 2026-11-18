@@ -9,7 +9,7 @@ interface NavbarProps {
 }
 
 // 'ai-automation' sits inside 'services', so it is checked first and wins while it is on screen
-const SECTION_IDS = ['home', 'ai-automation', 'services', 'examples', 'capabilities', 'process', 'about', 'contact'];
+const SECTION_IDS = ['home', 'ai-automation', 'services', 'examples', 'process', 'about', 'contact'];
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
   const { t } = useLanguage();
@@ -45,7 +45,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
     { name: t.nav.aiAutomation, id: 'ai-automation', flagship: true },
     { name: t.nav.services, id: 'services' },
     { name: t.nav.examples, id: 'examples' },
-    { name: t.nav.capabilities, id: 'capabilities' },
     { name: t.nav.howWeWork, id: 'process' },
     { name: t.nav.about, id: 'about' },
     // The main button already leads to the contact form, so Contact only appears in the phone menu
@@ -107,7 +106,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
           <button
             type="button"
             onClick={onOpenContact}
-            className="hidden sm:inline-flex items-center px-5 py-2.5 rounded-[3px] bg-brand text-white text-sm font-semibold whitespace-nowrap hover:bg-brand-deep transition-colors cursor-pointer"
+            className="press hidden sm:inline-flex items-center px-5 py-2.5 rounded-[3px] bg-brand text-white text-sm font-semibold whitespace-nowrap hover:bg-brand-deep cursor-pointer"
           >
             {t.nav.discussProject}
           </button>
@@ -125,7 +124,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
       </div>
 
       {mobileMenuOpen && (
-        <nav id="mobile-nav" className="xl:hidden border-t border-line bg-ground px-4 sm:px-6 pb-6" aria-label="Main">
+        <nav id="mobile-nav" className="menu-drop xl:hidden border-t border-line bg-ground px-4 sm:px-6 pb-6" aria-label="Main">
           <ul>
             {navLinks.map((link) => (
               <li key={link.id} className="border-b border-line">
@@ -148,7 +147,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
               setMobileMenuOpen(false);
               onOpenContact();
             }}
-            className="mt-6 w-full py-4 rounded-[3px] bg-brand text-white font-semibold cursor-pointer"
+            className="press mt-6 w-full py-4 rounded-[3px] bg-brand text-white font-semibold hover:bg-brand-deep cursor-pointer"
           >
             {t.nav.discussProject}
           </button>

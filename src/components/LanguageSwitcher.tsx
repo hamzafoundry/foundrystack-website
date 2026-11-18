@@ -32,7 +32,7 @@ export const LanguageSwitcher: React.FC<{ onDark?: boolean }> = ({ onDark = fals
       <button
         type="button"
         onClick={() => setIsOpen((o) => !o)}
-        className={`inline-flex items-center gap-1.5 px-2.5 py-2 rounded-[3px] text-sm font-medium transition-colors cursor-pointer ${
+        className={`press inline-flex items-center gap-1.5 px-2.5 py-2 rounded-[3px] text-sm font-medium cursor-pointer ${
           onDark ? 'text-white/80 hover:text-white hover:bg-white/10' : 'text-ink-2 hover:text-ink hover:bg-surface/70'
         }`}
         aria-expanded={isOpen}
@@ -44,7 +44,7 @@ export const LanguageSwitcher: React.FC<{ onDark?: boolean }> = ({ onDark = fals
       </button>
 
       {isOpen && (
-        <ul className="absolute end-0 mt-2 w-52 bg-surface border border-line rounded-[3px] shadow-[0_12px_32px_-12px_rgba(15,27,45,0.35)] py-1 z-50">
+        <ul className="menu-pop absolute end-0 mt-2 w-52 bg-surface border border-line rounded-[3px] shadow-[0_12px_32px_-12px_rgba(15,27,45,0.35)] py-1 z-50">
           {LANGUAGES.map((lang) => {
             const isSelected = lang.code === language;
             return (

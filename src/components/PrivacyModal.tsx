@@ -53,7 +53,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
 
         <div className="px-6 sm:px-8 py-6 space-y-5 text-ink-2 leading-relaxed">
           <p>
-            <strong className="text-ink">Foundry Stack</strong> {t.privacy.p1}
+            <strong className="text-ink">FoundryStack</strong> {t.privacy.p1}
           </p>
           {sections.map(([title, text]) => (
             <div key={title}>

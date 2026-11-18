@@ -15,11 +15,11 @@ export const CtaBanner: React.FC<CtaBannerProps> = ({ onDiscussProject }) => {
           {t.cta.title}
         </h2>
         <div className="lg:col-span-5">
-          <p className="text-lg text-white/90 leading-relaxed max-w-[44ch]">{t.cta.description}</p>
+          <p className="text-lg text-white leading-relaxed max-w-[44ch]">{t.cta.description}</p>
           <button
             type="button"
             onClick={onDiscussProject}
-            className="mt-7 inline-flex px-7 py-4 rounded-[3px] bg-white text-brand-ink font-semibold hover:bg-ground transition-colors cursor-pointer focus-visible:outline-white"
+            className="press mt-7 inline-flex px-7 py-4 rounded-[3px] bg-white text-brand-ink font-semibold hover:bg-ground cursor-pointer focus-visible:outline-white"
           >
             {t.cta.button}
           </button>

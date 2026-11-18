@@ -13,9 +13,9 @@ export const Footer: React.FC = () => {
   };
 
   const links = [
+    { id: 'ai-automation', name: t.nav.aiAutomation },
     { id: 'services', name: t.nav.services },
     { id: 'examples', name: t.nav.examples },
-    { id: 'capabilities', name: t.nav.capabilities },
     { id: 'process', name: t.nav.howWeWork },
     { id: 'about', name: t.nav.about },
   ];
@@ -34,7 +34,7 @@ export const Footer: React.FC = () => {
             <ul className="mt-4 space-y-2.5">
               {links.map((l) => (
                 <li key={l.id}>
-                  <a href={`#${l.id}`} onClick={(e) => go(e, l.id)} className="hover:text-white transition-colors">
+                  <a href={`#${l.id}`} onClick={(e) => go(e, l.id)} className="link-grow">
                     {l.name}
                   </a>
                 </li>
@@ -46,17 +46,17 @@ export const Footer: React.FC = () => {
             <h2 className="text-sm font-semibold text-white">{t.footer.legalHeader}</h2>
             <ul className="mt-4 space-y-2.5">
               <li>
-                <button type="button" onClick={() => setPrivacyOpen(true)} className="hover:text-white transition-colors cursor-pointer text-start">
+                <button type="button" onClick={() => setPrivacyOpen(true)} className="link-grow cursor-pointer text-start">
                   {t.footer.privacyLink}
                 </button>
               </li>
               <li>
-                <a href="#contact" onClick={(e) => go(e, 'contact')} className="hover:text-white transition-colors">
+                <a href="#contact" onClick={(e) => go(e, 'contact')} className="link-grow">
                   {t.footer.contactLink}
                 </a>
               </li>
               <li>
-                <a href="#home" onClick={(e) => go(e, 'home')} className="hover:text-white transition-colors">
+                <a href="#home" onClick={(e) => go(e, 'home')} className="link-grow">
                   {t.footer.backToTop}
                 </a>
               </li>
@@ -64,12 +64,11 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="pt-8 flex flex-col sm:flex-row justify-between gap-3 text-sm text-white/50">
+        <div className="pt-8 text-sm text-white/50">
           {/* The year is baked in at build time; the browser may disagree on New Year's Day */}
           <p suppressHydrationWarning>
             &copy; {new Date().getFullYear()} {t.footer.copyright}
           </p>
-          <p>Software. Systems. Solutions.</p>
         </div>
       </div>
 
