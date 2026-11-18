@@ -130,7 +130,7 @@ export const de: Translations = {
   },
   examples: {
     title: "Vorher und nachher.",
-    intro: "Drei Aufgaben, die wir oft automatisieren. Die Schritte ändern sich. Die Arbeit wird trotzdem erledigt.",
+    intro: "Drei Aufgaben, die wir für Sie automatisieren können. Die Schritte ändern sich. Die Arbeit wird trotzdem erledigt.",
     label: "Beispiele für Arbeit, die wir automatisieren.",
     before: "Vorher",
     after: "Nachher",

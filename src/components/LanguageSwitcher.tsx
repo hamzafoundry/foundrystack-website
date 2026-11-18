@@ -51,15 +51,22 @@ export const LanguageSwitcher: React.FC<{ onDark?: boolean }> = ({ onDark = fals
               <li key={lang.code}>
                 <button
                   type="button"
-                  lang={lang.code}
                   onClick={() => select(lang.code)}
-                  className={`w-full px-4 py-2.5 flex items-center justify-between text-start text-sm cursor-pointer transition-colors ${
+                  className={`w-full px-4 py-2.5 flex items-center justify-between gap-3 text-start text-sm cursor-pointer transition-colors ${
                     isSelected ? 'text-brand-deep font-semibold bg-ground/60' : 'text-ink hover:bg-ground/60'
                   }`}
                 >
-                  <span>
-                    {lang.nativeName}
-                    {lang.nativeName !== lang.name && <span className="ms-2 text-ink-3 font-normal">{lang.name}</span>}
+                  {/* A flex gap, not a margin: in a right-to-left page two Latin names form one
+                      left-to-right run, so a start-side margin would land on the wrong side. */}
+                  <span className="flex flex-wrap items-baseline gap-x-2">
+                    <span lang={lang.code} dir="auto">
+                      {lang.nativeName}
+                    </span>
+                    {lang.nativeName !== lang.name && (
+                      <span lang="en" dir="ltr" className="text-ink-3 font-normal">
+                        {lang.name}
+                      </span>
+                    )}
                   </span>
                   {isSelected && <Check className="w-4 h-4" aria-hidden="true" />}
                 </button>

@@ -130,7 +130,7 @@ export const pt: Translations = {
   },
   examples: {
     title: "Antes e depois.",
-    intro: "Três tarefas que automatizamos com frequência. Os passos mudam. O trabalho continua sendo feito.",
+    intro: "Três tarefas que podemos automatizar para você. Os passos mudam. O trabalho continua sendo feito.",
     label: "Exemplos do trabalho que automatizamos.",
     before: "Antes",
     after: "Depois",

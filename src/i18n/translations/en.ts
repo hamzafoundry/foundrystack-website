@@ -128,7 +128,7 @@ export const en = {
   },
   examples: {
     title: "Before and after.",
-    intro: "Three tasks we automate often. The steps change. The work still gets done.",
+    intro: "Three tasks we can automate for you. The steps change. The work still gets done.",
     label: "Examples of the work we automate.",
     before: "Before",
     after: "After",

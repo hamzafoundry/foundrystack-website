@@ -130,7 +130,7 @@ export const zh: Translations = {
   },
   examples: {
     title: "之前与之后。",
-    intro: "这是我们经常自动化的三项任务。步骤变了，工作照样完成。",
+    intro: "这是我们可以为您自动化的三项任务。步骤变了，工作照样完成。",
     label: "我们自动化的工作示例。",
     before: "之前",
     after: "之后",
