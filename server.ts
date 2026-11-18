@@ -31,12 +31,39 @@ function getDbInstance(): Firestore {
   return db;
 }
 
+// The Firestore client can reject an internal promise after a failed write (for example when
+// credentials are missing). Unhandled, that rejection terminates Node and takes the whole site
+// down. The request that caused it is already handled and answered, so log it and stay up.
+process.on("unhandledRejection", (reason) => {
+  console.error("[Unhandled rejection] (server kept running):", reason);
+});
+
+// Visitor-supplied text is inserted into the notification email's HTML, so it must be escaped
+// or anyone could inject links and markup into the email the owner receives.
+function escapeHtml(value: unknown): string {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 // In-memory rate limiting map (IP -> { count, resetAt })
 const ipRateLimitTracker = new Map<string, { count: number; resetAt: number }>();
+const RATE_WINDOW_MS = 15 * 60 * 1000; // 15 minute window
+
+// Drop expired entries so the map cannot grow without limit.
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, record] of ipRateLimitTracker) {
+    if (now > record.resetAt) ipRateLimitTracker.delete(ip);
+  }
+}, RATE_WINDOW_MS).unref();
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
-  const windowMs = 15 * 60 * 1000; // 15 minute window
+  const windowMs = RATE_WINDOW_MS;
   const maxSubmissions = 5; // Max 5 submissions per 15 minutes per IP
 
   const record = ipRateLimitTracker.get(ip);
@@ -85,23 +112,36 @@ ${inquiry.description}
 Submitted via Foundry Stack Project Request Form
 `;
 
+    // Every visitor-supplied value is escaped before it goes into the HTML.
+    const e = {
+      id: escapeHtml(inquiry.id),
+      name: escapeHtml(inquiry.name),
+      company: escapeHtml(inquiry.company),
+      email: escapeHtml(inquiry.email),
+      mailto: escapeHtml(encodeURIComponent(String(inquiry.email ?? ""))),
+      phone: escapeHtml(inquiry.phone),
+      projectType: escapeHtml(inquiry.projectType),
+      budget: escapeHtml(inquiry.budget),
+      description: escapeHtml(inquiry.description),
+    };
+
     const htmlContent = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #0f172a; color: #f8fafc; border: 1px solid #1e293b; border-radius: 12px; padding: 24px;">
         <div style="border-bottom: 2px solid #0284c7; padding-bottom: 12px; margin-bottom: 20px;">
           <h2 style="color: #38bdf8; margin: 0; font-size: 20px;">New Project Inquiry</h2>
-          <p style="color: #94a3b8; font-family: monospace; font-size: 13px; margin: 4px 0 0 0;">ID: ${inquiry.id}</p>
+          <p style="color: #94a3b8; font-family: monospace; font-size: 13px; margin: 4px 0 0 0;">ID: ${e.id}</p>
         </div>
         <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-          <tr><td style="padding: 6px 0; color: #94a3b8; width: 140px;">Client Name:</td><td style="font-weight: 600; color: #ffffff;">${inquiry.name}</td></tr>
-          <tr><td style="padding: 6px 0; color: #94a3b8;">Company:</td><td style="color: #ffffff;">${inquiry.company}</td></tr>
-          <tr><td style="padding: 6px 0; color: #94a3b8;">Email:</td><td><a href="mailto:${inquiry.email}" style="color: #38bdf8;">${inquiry.email}</a></td></tr>
-          <tr><td style="padding: 6px 0; color: #94a3b8;">Phone / WhatsApp:</td><td style="color: #ffffff;">${inquiry.phone}</td></tr>
-          <tr><td style="padding: 6px 0; color: #94a3b8;">Requested Service:</td><td style="color: #38bdf8; font-weight: 600;">${inquiry.projectType}</td></tr>
-          <tr><td style="padding: 6px 0; color: #94a3b8;">Budget Expectation:</td><td style="color: #4ade80; font-weight: 600;">${inquiry.budget}</td></tr>
+          <tr><td style="padding: 6px 0; color: #94a3b8; width: 140px;">Client Name:</td><td style="font-weight: 600; color: #ffffff;">${e.name}</td></tr>
+          <tr><td style="padding: 6px 0; color: #94a3b8;">Company:</td><td style="color: #ffffff;">${e.company}</td></tr>
+          <tr><td style="padding: 6px 0; color: #94a3b8;">Email:</td><td><a href="mailto:${e.mailto}" style="color: #38bdf8;">${e.email}</a></td></tr>
+          <tr><td style="padding: 6px 0; color: #94a3b8;">Phone / WhatsApp:</td><td style="color: #ffffff;">${e.phone}</td></tr>
+          <tr><td style="padding: 6px 0; color: #94a3b8;">Requested Service:</td><td style="color: #38bdf8; font-weight: 600;">${e.projectType}</td></tr>
+          <tr><td style="padding: 6px 0; color: #94a3b8;">Budget Expectation:</td><td style="color: #4ade80; font-weight: 600;">${e.budget}</td></tr>
         </table>
         <div style="margin-top: 20px; background: #020617; border: 1px solid #334155; border-radius: 8px; padding: 16px;">
           <h4 style="color: #94a3b8; margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Project Description</h4>
-          <p style="white-space: pre-wrap; margin: 0; color: #e2e8f0; font-size: 14px; line-height: 1.6;">${inquiry.description}</p>
+          <p style="white-space: pre-wrap; margin: 0; color: #e2e8f0; font-size: 14px; line-height: 1.6;">${e.description}</p>
         </div>
         <div style="margin-top: 24px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #1e293b; padding-top: 16px;">
           Foundry Stack Lead Capture System
@@ -146,12 +186,17 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  app.use(express.json());
+  // Behind Cloud Run there is exactly one trusted proxy hop (Google's front end), which appends
+  // the real client address to X-Forwarded-For. Trusting one hop makes req.ip that address;
+  // values a visitor writes into the header themselves are ignored.
+  app.set("trust proxy", 1);
+  app.use(express.json({ limit: "20kb" }));
 
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
     try {
-      const clientIp = (req.headers["x-forwarded-for"] as string || req.ip || "unknown").split(",")[0].trim();
+      // Not the first X-Forwarded-For value: that one is whatever the visitor chose to send.
+      const clientIp = req.ip || req.socket.remoteAddress || "unknown";
 
       // 1. Honeypot check (Silent drop for bot submissions)
       if (req.body.website_url_hp && req.body.website_url_hp.trim().length > 0) {
@@ -256,11 +301,11 @@ async function startServer() {
   });
 
   app.get("/api/health", (_req, res) => {
+    // Reports only what this endpoint actually knows: the server is up.
+    // (It used to claim "Firestore connected" without ever checking.)
     res.json({
       status: "online",
-      brand: "Foundry Stack",
-      database: "Firestore connected",
-      tagline: "Software. Systems. Solutions.",
+      brand: "FoundryStack",
       timestamp: new Date().toISOString(),
     });
   });
