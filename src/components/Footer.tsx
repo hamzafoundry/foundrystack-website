@@ -14,9 +14,9 @@ export const Footer: React.FC = () => {
 
   const links = [
     { id: 'services', name: t.nav.services },
-    { id: 'solutions', name: t.nav.solutions },
+    { id: 'examples', name: t.nav.examples },
     { id: 'capabilities', name: t.nav.capabilities },
-    { id: 'process', name: t.nav.process },
+    { id: 'process', name: t.nav.howWeWork },
     { id: 'about', name: t.nav.about },
   ];
 
@@ -65,7 +65,8 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="pt-8 flex flex-col sm:flex-row justify-between gap-3 text-sm text-white/50">
-          <p>
+          {/* The year is baked in at build time; the browser may disagree on New Year's Day */}
+          <p suppressHydrationWarning>
             &copy; {new Date().getFullYear()} {t.footer.copyright}
           </p>
           <p>Software. Systems. Solutions.</p>

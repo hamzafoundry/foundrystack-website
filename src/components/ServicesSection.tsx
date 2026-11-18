@@ -1,121 +1,161 @@
-import React from 'react';
-import { useReducedMotion } from 'motion/react';
+import React, { useId, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { ArrowRight, Check, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useCalmMotion } from '../lib/useHydrated';
 import { SectionHeader } from './SectionHeader';
-import { StackGraphic } from './StackGraphic';
-import { AgentGlyph } from './AgentField';
-import { FEATURED_SERVICE, SERVICE_LAYERS, ServiceId } from './serviceLayers';
+import { AgentGlyph } from './AgentGlyph';
+import { FEATURED_SERVICE, SERVICE_LAYERS, ServiceId, ServiceLayer, isPlaceholder } from './serviceLayers';
 
 interface ServicesSectionProps {
   onSelectService: (serviceId: ServiceId) => void;
 }
 
-const Bullet: React.FC<{ light?: boolean }> = ({ light }) => (
-  <span className={`mt-[7px] w-1.5 h-1.5 flex-shrink-0 ${light ? 'bg-[#7DB2FF]' : 'bg-brand'}`} aria-hidden="true" />
-);
+/** Text that is still an unconfirmed placeholder gets a dashed amber outline so nobody ships it by accident. */
+const MaybePlaceholder: React.FC<{ text: string }> = ({ text }) => {
+  if (!isPlaceholder(text)) return <>{text}</>;
+  const [before, rest] = text.split('⟦');
+  const [mark, after = ''] = rest.split('⟧');
+  return (
+    <>
+      {before}
+      <mark className="svc-placeholder">⟦{mark}⟧</mark>
+      {after}
+    </>
+  );
+};
+
+interface ServiceCardProps {
+  layer: ServiceLayer;
+  featured: boolean;
+  onSelect: () => void;
+}
+
+/** One anatomy for all four services; the flagship is the same card, larger and highlighted. */
+const ServiceCard: React.FC<ServiceCardProps> = ({ layer, featured, onSelect }) => {
+  const { t } = useLanguage();
+  const calm = useCalmMotion();
+  const s = t.services;
+  const item = s.items[layer.key];
+  const [open, setOpen] = useState(false);
+  const panelId = useId();
+
+  const head = (
+    <>
+      {featured && (
+        <p className="svc-badge">
+          <span className="w-1.5 h-1.5 rounded-full bg-brand" aria-hidden="true" />
+          {s.featuredBadge}
+        </p>
+      )}
+      <div className="flex items-center gap-4">
+        <span className="svc-glyph" aria-hidden="true">
+          <AgentGlyph shape={layer.shape} active={featured} spin={!calm} />
+        </span>
+        <h3 className={`type-heading text-ink min-w-0 ${featured ? 'text-[clamp(1.7rem,3vw,2.4rem)]' : 'text-2xl'}`}>{item.title}</h3>
+      </div>
+      <p className={`mt-6 text-ink-2 leading-relaxed ${featured ? 'text-lg' : ''}`}>{item.problem}</p>
+      <p className={`mt-3 text-ink leading-relaxed font-medium ${featured ? 'text-xl' : 'text-lg'}`}>{item.whatWeDo}</p>
+      <div className="mt-5 border-s-2 border-brand ps-4">
+        <p className="text-sm font-semibold text-brand-deep">{s.youGet}</p>
+        <p className="mt-1 text-ink leading-relaxed">{item.result}</p>
+      </div>
+    </>
+  );
+
+  const body = (
+    <>
+      <ul className="grid grid-cols-1 gap-y-3">
+        {item.features.map((feature) => (
+          <li key={feature} className="flex gap-3 text-[15px] text-ink-2 leading-snug">
+            <span className="mt-[7px] w-1.5 h-1.5 bg-brand flex-shrink-0" aria-hidden="true" />
+            <span>{feature}</span>
+          </li>
+        ))}
+      </ul>
+
+      {/* The hero's story in miniature: one piece of work, before and after */}
+      <div className="svc-work" aria-hidden="true">
+        <span className="svc-work-before">{item.work.before}</span>
+        <ArrowRight className="svc-work-arrow" />
+        <span className="svc-work-after">
+          <Check className="w-3.5 h-3.5" strokeWidth={3} />
+          {item.work.after}
+        </span>
+      </div>
+    </>
+  );
+
+  return (
+    <article id={layer.id === FEATURED_SERVICE ? 'ai-automation' : undefined} className={`svc-card ${featured ? 'svc-card-featured lg:col-span-3' : ''}`}>
+      <div className={`flex-1 ${featured ? 'grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14' : 'flex flex-col gap-7'}`}>
+        <div>{head}</div>
+        <div className="flex flex-col gap-7">{body}</div>
+      </div>
+
+      <div className="svc-footer">
+        <button type="button" onClick={onSelect} className={featured ? 'svc-cta-primary' : 'svc-cta-secondary'}>
+          {featured ? t.hero.ctaDiscuss : s.ctaOther}
+        </button>
+        <button type="button" className="svc-toggle" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen((o) => !o)}>
+          {open ? s.hideHow : s.showHow}
+          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} aria-hidden="true" />
+        </button>
+      </div>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            id={panelId}
+            initial={calm ? false : { height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={calm ? undefined : { height: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="svc-how">
+              <ul className={`grid grid-cols-1 gap-3 ${featured ? 'lg:grid-cols-2 lg:gap-x-10' : ''}`}>
+                {item.how.map((line) => (
+                  <li key={line} className="flex gap-3 text-[15px] text-ink-2 leading-relaxed">
+                    <span className="mt-[9px] w-3 h-px bg-ink-3 flex-shrink-0" aria-hidden="true" />
+                    <span>
+                      <MaybePlaceholder text={line} />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-6 text-sm font-semibold text-ink">{s.toolsLabel}</p>
+              <ul className="mt-2.5 flex flex-wrap gap-2">
+                {layer.tools.map((tool) => (
+                  <li key={tool} className={isPlaceholder(tool) ? 'svc-tool svc-tool-placeholder' : 'svc-tool'}>
+                    {tool}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </article>
+  );
+};
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectService }) => {
   const { t } = useLanguage();
-  const reduceMotion = !!useReducedMotion();
-  const labels = SERVICE_LAYERS.map((l) => t.services.items[l.key].title);
-  const featured = SERVICE_LAYERS.find((l) => l.id === FEATURED_SERVICE)!;
-  const f = t.services.items[featured.key];
-  const others = SERVICE_LAYERS.filter((l) => l.id !== FEATURED_SERVICE);
 
   return (
     <section id="services" className="py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeader title={t.services.title} description={t.services.description} />
-
-        {/* Flagship offer: the only dark panel in a light section */}
-        <article
-          id="ai-automation"
-          className="relative scroll-mt-24 overflow-hidden rounded-[4px] text-white p-7 sm:p-10 lg:p-14 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12"
-          style={{
-            backgroundColor: '#0A1424',
-            backgroundImage:
-              'radial-gradient(640px 360px at 85% 20%, rgba(29,78,160,0.45) 0%, rgba(10,20,36,0) 70%), radial-gradient(520px 300px at 0% 100%, rgba(110,92,255,0.16) 0%, rgba(10,20,36,0) 70%)',
-            boxShadow: '0 0 0 1px rgba(61,139,255,0.45), 0 40px 90px -40px rgba(0,102,255,0.75)',
-          }}
-        >
-          <div className="lg:col-span-5">
-            <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#BFD7FF] bg-[#3D8BFF]/15 border border-[#3D8BFF]/40 px-3 py-1.5 rounded-full">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#7DB2FF]" aria-hidden="true" />
-              {t.services.featuredBadge}
-            </p>
-            <div className="mt-8 flex items-center gap-5">
-              <span className="relative flex-shrink-0 w-16 h-16 flex items-center justify-center">
-                <span
-                  className="absolute -inset-4 rounded-full pointer-events-none"
-                  style={{ background: 'radial-gradient(circle, rgba(61,139,255,0.35) 0%, rgba(61,139,255,0) 70%)' }}
-                  aria-hidden="true"
-                />
-                <AgentGlyph shape="orbit" active spin={!reduceMotion} size={60} />
-              </span>
-              <h3 className="type-heading text-[clamp(1.9rem,3.4vw,2.75rem)] text-white min-w-0">{f.title}</h3>
-            </div>
-            <p className="mt-5 text-lg text-white/70">{f.tagline}</p>
-          </div>
-
-          <div className="lg:col-span-7">
-            <p className="text-xl leading-relaxed text-white/90 max-w-[52ch]">{f.description}</p>
-            <ul className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-              {f.features.map((feature) => (
-                <li key={feature} className="flex gap-3 text-white/85 leading-snug">
-                  <Bullet light />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-            <button
-              type="button"
-              onClick={() => onSelectService(featured.id)}
-              className="mt-10 w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-[3px] bg-brand text-white font-semibold hover:bg-[#1F7BFF] shadow-[0_0_32px_-6px_rgba(0,102,255,0.8)] transition-colors cursor-pointer focus-visible:outline-white"
-            >
-              {t.hero.ctaDiscuss}
-            </button>
-          </div>
-        </article>
-
-        <div className="mt-14">
-          {others.map((layer) => {
-            const item = t.services.items[layer.key];
-            const stackIndex = SERVICE_LAYERS.findIndex((l) => l.id === layer.id);
-            return (
-              <article
-                key={layer.id}
-                className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 py-10 md:py-12 border-t border-line last:border-b"
-              >
-                <div className="md:col-span-5 flex gap-5 items-start">
-                  {/* Shows where this service sits in the stack */}
-                  <StackGraphic labels={labels} active={stackIndex} mini className="w-14 flex-shrink-0 mt-1" />
-                  <div className="min-w-0">
-                    <h3 className="type-heading text-2xl sm:text-[1.75rem] text-ink">{item.title}</h3>
-                    <p className="mt-2 text-ink-2">{item.tagline}</p>
-                  </div>
-                </div>
-
-                <div className="md:col-span-7">
-                  <p className="text-lg leading-relaxed text-ink max-w-[60ch]">{item.description}</p>
-                  <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
-                    {item.features.map((feature) => (
-                      <li key={feature} className="flex gap-3 text-[15px] text-ink-2 leading-snug">
-                        <Bullet />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <button
-                    type="button"
-                    onClick={() => onSelectService(layer.id)}
-                    className="mt-8 text-sm font-semibold text-brand-deep underline underline-offset-4 decoration-2 decoration-brand/40 hover:decoration-brand cursor-pointer text-start"
-                  >
-                    {t.services.inquireButton} {item.title}
-                  </button>
-                </div>
-              </article>
-            );
-          })}
+        <SectionHeader title={t.services.title} description={t.services.intro} />
+        <div className="svc-grid grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {SERVICE_LAYERS.map((layer) => (
+            <ServiceCard
+              key={layer.id}
+              layer={layer}
+              featured={layer.id === FEATURED_SERVICE}
+              onSelect={() => onSelectService(layer.id)}
+            />
+          ))}
         </div>
       </div>
     </section>

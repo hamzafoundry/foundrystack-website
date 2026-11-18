@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ServicesSection } from './components/ServicesSection';
-import { SolutionsSection } from './components/SolutionsSection';
+import { ExamplesSection } from './components/ExamplesSection';
 import { EngineeringSection } from './components/EngineeringSection';
 import { ApproachSection } from './components/ApproachSection';
 import { AboutSection } from './components/AboutSection';
 import { CtaBanner } from './components/CtaBanner';
 import { ContactSection, ProjectTypePreselect } from './components/ContactSection';
 import { Footer } from './components/Footer';
-import { CATEGORY_PROJECT_TYPE_INDEX, SERVICE_LAYERS, ServiceId } from './components/serviceLayers';
+import { SERVICE_LAYERS, ServiceId } from './components/serviceLayers';
 
 export default function App() {
   const [preselect, setPreselect] = useState<ProjectTypePreselect>({ index: 0, tick: 0 });
@@ -42,7 +42,7 @@ export default function App() {
       <main className="flex-grow">
         <Hero onDiscussProject={() => scrollToContact()} />
         <ServicesSection onSelectService={inquireService} />
-        <SolutionsSection onRequestSolution={(category) => scrollToContact(CATEGORY_PROJECT_TYPE_INDEX[category] ?? 0)} />
+        <ExamplesSection />
         <EngineeringSection />
         <ApproachSection />
         <AboutSection />

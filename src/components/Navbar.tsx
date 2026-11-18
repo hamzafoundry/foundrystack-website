@@ -9,7 +9,7 @@ interface NavbarProps {
 }
 
 // 'ai-automation' sits inside 'services', so it is checked first and wins while it is on screen
-const SECTION_IDS = ['home', 'ai-automation', 'services', 'solutions', 'capabilities', 'process', 'about', 'contact'];
+const SECTION_IDS = ['home', 'ai-automation', 'services', 'examples', 'capabilities', 'process', 'about', 'contact'];
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
   const { t } = useLanguage();
@@ -44,9 +44,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
   const navLinks = [
     { name: t.nav.aiAutomation, id: 'ai-automation', flagship: true },
     { name: t.nav.services, id: 'services' },
-    { name: t.nav.solutions, id: 'solutions' },
+    { name: t.nav.examples, id: 'examples' },
     { name: t.nav.capabilities, id: 'capabilities' },
-    { name: t.nav.process, id: 'process' },
+    { name: t.nav.howWeWork, id: 'process' },
     { name: t.nav.about, id: 'about' },
     // The main button already leads to the contact form, so Contact only appears in the phone menu
     { name: t.nav.contact, id: 'contact', mobileOnly: true },
