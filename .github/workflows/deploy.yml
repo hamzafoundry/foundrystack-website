@@ -68,6 +68,20 @@ jobs:
           source: ./
           flags: --port=3000
 
+      # A plain deploy keeps the service's existing traffic split. The service was
+      # first set up with traffic pinned to one revision, so new revisions got 0%
+      # and the old build kept serving. Always send all traffic to the new one.
+      - name: Route all traffic to the new revision
+        run: |
+          gcloud run services update-traffic "${{ vars.CLOUD_RUN_SERVICE }}" \
+            --to-latest \
+            --region "${{ vars.CLOUD_RUN_REGION }}" \
+            --project "${{ vars.GCP_PROJECT_ID }}"
+          gcloud run services describe "${{ vars.CLOUD_RUN_SERVICE }}" \
+            --region "${{ vars.CLOUD_RUN_REGION }}" \
+            --project "${{ vars.GCP_PROJECT_ID }}" \
+            --format 'table(status.traffic[].revisionName,status.traffic[].percent,status.traffic[].latestRevision)'
+
       # 1) The new revision itself must be healthy (hard fail if not).
       # 2) The public domain should serve it too; if it does not, the deploy still
       #    succeeded, so this warns and prints what the domain actually returned.
