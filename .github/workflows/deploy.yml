@@ -68,20 +68,34 @@ jobs:
           source: ./
           flags: --port=3000
 
+      # 1) The new revision itself must be healthy (hard fail if not).
+      # 2) The public domain should serve it too; if it does not, the deploy still
+      #    succeeded, so this warns and prints what the domain actually returned.
       - name: Smoke test the live site
         env:
+          RUN_URL: ${{ steps.deploy.outputs.url }}
           PUBLIC_URL: ${{ vars.PUBLIC_URL || 'https://foundrystack.net' }}
         run: |
+          is_new_build() {
+            curl -fsS --max-time 15 "$1/api/health" | grep -q '"brand":"FoundryStack"' &&
+            curl -fsS --max-time 15 "$1/" | grep -q '<h1'
+          }
+          show() {
+            echo "--- $1/api/health"
+            curl -sS --max-time 15 -o /dev/stderr -w "\nHTTP %{http_code}, IP %{remote_ip}\n" "$1/api/health" 2>&1 | head -c 600; echo
+            echo "--- DNS for ${1#https://}"
+            getent hosts "${1#https://}" || echo "no DNS record"
+          }
+
           for attempt in 1 2 3 4 5 6; do
-            health=$(curl -fsS --max-time 15 "$PUBLIC_URL/api/health" || true)
-            page=$(curl -fsS --max-time 15 "$PUBLIC_URL/" || true)
-            # The new build reports brand "FoundryStack" and pre-renders the hero headline.
-            if echo "$health" | grep -q '"brand":"FoundryStack"' && echo "$page" | grep -q '<h1'; then
-              echo "Live site is healthy: $health"
-              exit 0
-            fi
-            echo "Attempt $attempt: not serving the new build yet, retrying in 15s"
-            sleep 15
+            if is_new_build "$RUN_URL"; then echo "Cloud Run revision is healthy: $RUN_URL"; break; fi
+            if [ "$attempt" = 6 ]; then show "$RUN_URL"; echo "::error::New Cloud Run revision is not healthy: $RUN_URL"; exit 1; fi
+            echo "Attempt $attempt: Cloud Run not ready, retrying in 15s"; sleep 15
           done
-          echo "::error::$PUBLIC_URL is not serving the new build. Cloud Run URL: ${{ steps.deploy.outputs.url }}"
-          exit 1
+
+          for attempt in 1 2 3 4; do
+            if is_new_build "$PUBLIC_URL"; then echo "$PUBLIC_URL is serving the new build"; exit 0; fi
+            echo "Attempt $attempt: $PUBLIC_URL not serving the new build yet, retrying in 15s"; sleep 15
+          done
+          show "$PUBLIC_URL"
+          echo "::warning::Deployed OK to $RUN_URL, but $PUBLIC_URL is not serving it. Check the domain mapping / DNS for $PUBLIC_URL."
